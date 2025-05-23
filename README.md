@@ -18,9 +18,7 @@ All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed u
   <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Open document</a>
 </p>
 
-__
-
-
+<br><br>
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">
@@ -32,6 +30,33 @@ __
   <em>Tutorial video for HALFpipe preprocessing:</em><br/>
   <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Watch on YouTube</a>
 </p>
+
+
+## Analyses
+
+The analyses were intended for the three cognitive domains of the task-based analyses in ENIGMA-OCD: emotional (negative) valence, inhibitory control, and executive function. Available task data across the ENIGMA-OCD consortium was categorized into one of these three domains, each of which is subserved by a partly distinct cogntivive circuit (fronto-limbic, ventral cognitive, and dorsal cognitive). The scripts available here were designed to be compatible with the Amsterdam University Medical Center's Luna server cluster. On the Luna server, all scripts can be found in `/data/anw/anw-gold/NP/projects/data_ENIGMA-OCD/ENIGMA-TASK/scripts/tb-mega-pipeline`. 
+
+
+
+<img src="tb-fMRI-domains.png" alt="Cognitive domains" width="400"/>
+
+Some preparation is needed before scripts can be run.
+
+<img src="mega-analysis-methods.jpg" alt="Processing pipeline" width="400"/>
+
+1.	Assign 3-digit site codes to each site, and a new 6-digit number to each subject, in Site_codes.xslx file. Save as .csv. 
+
+2.	Convert to a key-value dictionary, in Dictonary_SUB_ID.xlsx file
+
+3.	Make mega-analytic dictionary with names of features, tasks, contrasts, etc per sample, in Mega_analysis_dictionary.xlsx file. Save as .csv.
+
+4.	Consolidate all site halfpipe output in one folder, named by site, then sample dir underneath
+
+5.	Use 1_convert_site_files_to_codes.sh script to convert original sub IDs to new assigned 6-digit identifiers and to write all files needed to specific contrasts in /merged dir
+
+6.	Use 2_exclude_failed_QC_subs.sh to exclude subjects/runs which failed QC based on failed_QC.txt (same for both contrasts) that was prepared first in Excluded_data.xlsx 
+
+7.	For samples that had multiple runs/sessions, run 3_fsl_glm_to_aggregate_sessions_runs.sh script
 
 
 
