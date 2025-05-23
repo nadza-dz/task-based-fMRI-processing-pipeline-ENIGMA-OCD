@@ -6,31 +6,24 @@ This manual guides you through completing group-level analyses on individual par
 
 All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed using [HALFpipe](https://github.com/HALFpipe/HALFpipe) (Waller et al., 2022), an open-source containerized processing pipeline that was used for pre-processing and first-level feature extraction. The manual and acoompanying video tutorial explain how to process raw task data using HALFpipe for the ENIGMA-OCD task-based analyses.
 
-
-<p align="center">
-  <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSoqfKZvyctM/edit?usp=sharing&ouid=117298130236953584298&rtpof=true&sd=true">
-    <img src="halfpipe-manual-ENIGMA-OCD.JPG" alt="Tutorial video for HALFpipe preprocessing" width="400"/>
-  </a>
-</p>
-
-<p align="center">
-  <em>Manual for HALFpipe preprocessing:</em><br/>
-  <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Open document</a>
-</p>
-
-<br><br>
-
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">
-    <img src="halfpipe-tutorial-ENIGMA-OCD.JPG" alt="Tutorial video for HALFpipe preprocessing" width="400"/>
-  </a>
-</p>
-
-<p align="center">
-  <em>Tutorial video for HALFpipe preprocessing:</em><br/>
-  <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Watch on YouTube</a>
-</p>
-
+<table align="center">
+  <tr>
+    <td align="center">
+      <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSofKZvyctM/edit?usp=sharing&ouid=117298130236953584298&rtpof=true&sd=true">
+        <img src="halfpipe-manual-ENIGMA-OCD.JPG" alt="Manual for HALFpipe preprocessing" style="max-width: 200px;">
+      </a><br />
+      <em>Manual for HALFpipe preprocessing:</em><br />
+      <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSofKZvyctM/edit?usp=sharing&ouid=117298130236953584298&rtpof=true&sd=true">Open document</a>
+    </td>
+    <td align="center">
+      <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">
+        <img src="halfpipe-tutorial-ENIGMA-OCD.JPG" alt="Tutorial video for HALFpipe preprocessing" style="max-width: 200px;">
+      </a><br />
+      <em>Tutorial video for HALFpipe preprocessing:</em><br />
+      <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Watch on YouTube</a>
+    </td>
+  </tr>
+</table>
 
 ## Analyses
 
