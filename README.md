@@ -34,7 +34,9 @@ The analyses were intended for the three cognitive domains of the task-based ana
   <em>Cognitive domains investigated in task fMRI analyses</em>
 </p>
 
-In the figure below the processing pipeline is depicted for one of the domains - negative emotional valence. Using the manuals linked above, the steps of `Harmonzied processing` and `First-level contrast` extraction have already taken place. This manual will explain how to use the available scripts to execute `Mega-analysis`, investigating both case-control effects and the effects of clinical characteristics of OCD, such as the age of OCD onset, medication status, and symptom severity. Region of interest (ROI) analyses in the relevant neural circuit for each domain are conducted at the group-level, as well as whole-brain analyses via two separate approaches (not pictured).
+<br><br>
+
+In the figure below the processing pipeline is depicted for one of the domains - negative emotional valence. Using the manuals linked above, the steps of `Harmonzied processing` and `First-level contrast` extraction have already taken place. This manual will explain how to use the available scripts to execute `Mega-analysis`, investigating both case-control effects and the effects of clinical characteristics of OCD, such as the age of OCD onset, medication status, and symptom severity. Region of interest (ROI) analyses in the relevant neural circuit for each domain are conducted at the group-level, as well as whole-brain analyses via two separate approaches (not pictured). We refer to these analyses as mega-analyses because we use individual-participant data when combining datasets of multiple samples, which is a different than the approach meta-analyses typically take. Meta-analyses usually rely on summary statistics at the sample level, aggregating data across samples, but not across individual participants. A huge advantage of our mega-analytic approach is that we are able to investigate the effects of participant-level variables, such as medication status or symptom severity, on brain activity in a way that meta-analyses cannot.
 
 <p align="center">
   <img src="mega-analysis-methods.jpg" alt="Processing pipeline" width="1000"/><br/>
@@ -108,6 +110,30 @@ Some preparation is needed before scripts can be run. Because each site used the
 <br><br>
 
 
+### Region-Of-Interest analyses
+
+For the circuit-level analyses, we have expectations about where activation will be found based on previous meta-analyses that were done either in healthy controls or in individuals with OCD on the task domains that we investigate here. We therefore first restrict analyses to these regions to investiggate the circuits of interest before we move to whole-brain analyses.
+
+1. Create ROI nifti images. Subcortical ROIs are created with Melbourne atlas (which is in the same MNI2009c asymmetrical space as HALFpipe uses). Spherical ROIs created with 5-mm sphere around coordinates identified in literature (Thorsen, Nitschke, Norman). 
+a.	Coordinates listed in /data/anw/anw-gold/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/ROIs/ROI_MNI6_coordinates.txt
+b.	Run script 4_make_spheres_MNI2009.sh to create spheres
+c.	Remove overlapping regions from spheres
+i.	Multiply spheres by hemisphere mask to get non-overlapping R/L spheres. Done with fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz  -roi 0 48.5 0 -1 0 -1 0 -1 –bin leftHemisphere 
+and
+fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz  -roi 48.5 -1 0 -1 0 -1 0 -1 -bin rightHemisphere
+1.	48.5 determined by taking half of dim 1 after running fslinfo tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz  
+d.	Cobmine regions with multiple coordinates into single image with both regions, eg:
+fslmaths FEF_r1.nii.gz -add FEF_r2.nii.gz FEF_r.nii.gz
+i.	This gives both spheres the same value in the atlas file, so when extracted later the activation reflects the average of both spheres
+ii.	For executive domain’s LOAD contrast, 13-ROI atlas should be used in final version
+e.	Extract volumes of ROIs into volumes.txt using 
+for ROI in *.nii.gz; do echo "${ROI%.nii.gz}" $(fslstats ${ROI} -V) 
+f.	For visualization on glass brain, use BrainNetViewer in Matlab, open Matlab on Remote Desktop, navigate to BrainNetViewer folder in Documents, and enter it using: BrainNet;
+i.	Go to File>Load file
+Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv
+Mapping file:
+3D nifti file with all ROIs 
+ii.	Play with load settings, surface opacity should be about 50%, Volume>type selection>ROI drawing
 
 
 ## Publications using this pipeline
