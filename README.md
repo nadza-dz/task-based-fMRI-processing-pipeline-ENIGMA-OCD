@@ -99,7 +99,7 @@ Some preparation is needed before scripts can be run. Because each site used the
 
 6.	Use `2_exclude_failed_QC_subs.sh` script to exclude participants who failed QC based on `failed_QC.txt`
    
-7.	Use `3_fsl_glm_to_aggregate_sessions_runs.sh` scriptFor samples that had multiple runs/sessions, run 
+7.	Use `3_fsl_glm_to_aggregate_sessions_runs.sh` script to aggregate contrast maps across runs or sessions at the participant-level for samples that employed a task design with multiple runs or sessions. This step ensures that each participant contributes only one observation to the group-level analyses by averaging across all available runs or sessions with a simple intercept model. 
 
 <p align="center">
   <img src="mega-analysis-methods.jpg" alt="Processing pipeline" width="1000"/><br/>
