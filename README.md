@@ -29,28 +29,56 @@ All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed u
 
 The analyses were intended for the three cognitive domains of the task-based analyses in ENIGMA-OCD: emotional (negative) valence, inhibitory control, and executive function. Available task data across the ENIGMA-OCD consortium was categorized into one of these three domains, each of which is subserved by a partly distinct cogntivive circuit (fronto-limbic, ventral cognitive, and dorsal cognitive). The scripts available here were designed to be compatible with the Amsterdam University Medical Center's Luna server cluster. On the Luna server, all scripts can be found in `/data/anw/anw-gold/NP/projects/data_ENIGMA-OCD/ENIGMA-TASK/scripts/tb-mega-pipeline`. 
 
-
 <p align="center">
   <img src="tb-fMRI-domains.png" alt="Cognitive domains" width="700"/><br/>
   <em>Cognitive domains investigated in task fMRI analyses</em>
 </p>
 
-Some preparation is needed before scripts can be run.
+
+### Preparation
+
+Some preparation is needed before scripts can be run. Because each site used their own labels for participant IDs, task names, session and run names, etc, it is necessary to standardize everything to allow it to be cobmined at the group-level analysis stage. This requires preparing some documents first:
+
+1.	Assign 3-digit sample codes to each sample, and a new 6-digit identifier to each participant. Convert this to a key-value dictionary with two columns: the old Subj ID and the new Subj ID. Save as Dictonary_SUB_ID.csv file.
+   
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">Original Subject ID</th>
+      <th align="left">New Subject ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>sub-MRI201905101BART002</td><td>sub-550002</td></tr>
+    <tr><td>sub-MRI201905211BART003</td><td>sub-550003</td></tr>
+    <tr><td>sub-MRI201905291BART005</td><td>sub-550005</td></tr>
+    <tr><td>sub-MRI201906031BART006</td><td>sub-550006</td></tr>
+    <tr><td>sub-MRI201906051BART007</td><td>sub-550007</td></tr>
+  </tbody>
+</table>
+
+<br><br>
+
+2.	By checking each site's HALFpipe `/derivatives/halfpipe` folder, make a mega-analytic dictionary that inventories the labels that were used at that site for first-level features including: 1) sample, 2) site, 3) site code (the one you assigned in step #2 above), 3) task, 4) the various contrasts created at the first level, and 5) the various confound-removal strategies used in the first-level analyses (in this case: ICA-AROMA, motion-correction with 6 rigid-body motion parameters, and no correction). Save as Mega_analysis_dictionary.csv.
+   
+| Sample              | Site           | Code | Task | Contrast1_EMOgtNEUT | Contrast2_OCDgtNEUT | Contrast3_FEARgtNEUT | Contrast4__OCDgtFEAR | ICAAROMA | MOTIONCORR | NOCORR |
+|:--------------------|:---------------|:-----|:-----|:-------------------|:-------------------|:--------------------|:-------------|:---------|:-----------|:-------|
+| VUmc_ARRIBA_TIPICCO | van_den_Heuvel | 822  | SPT  | OCDFEARGtSCRAMBLED | OCDGtSCRAMBLED     | FEARGtSCRAMBLED     | OCDGtFEAR   | ICAAROMA | MOTIONCORR | NOCORR |
+| VUmc_VENI           | van_den_Heuvel | 916  | ERT  | OCDFEARGtNEUT      | OCDGtNEUT          | FEARGtNEUT          | OCDGtFEAR   | ICAAROMA | MOTIONCORR | NOCORR |
+
+<br><br>
+
+3.	Organize HALFpipe outputs by creating one main directory containing a folder for each site. Inside each site folder, create one directory per sample and place the sample's HALFpipe folder into it
+
+4.	Use `1_convert_site_files_to_codes.sh` script to create a cleaned and compiled version of all HALFpipe output. This will create a new `/merged` directory containing compiled files for each contrast of interest. These files aggregate all the data needed for group-level analyses, per participant. Additionally, the script assigns new participant IDs based on the files created above, and renames all files to ensure consistent naming and directory structure.
 
 
-1.	Assign 3-digit site codes to each site, and a new 6-digit number to each subject, in Site_codes.xslx file. Save as .csv. 
 
-2.	Convert to a key-value dictionary, in Dictonary_SUB_ID.xlsx file
 
-3.	Make mega-analytic dictionary with names of features, tasks, contrasts, etc per sample, in Mega_analysis_dictionary.xlsx file. Save as .csv.
 
-4.	Consolidate all site halfpipe output in one folder, named by site, then sample dir underneath
+9.	Use 2_exclude_failed_QC_subs.sh to exclude subjects/runs which failed QC based on failed_QC.txt (same for both contrasts) that was prepared first in Excluded_data.xlsx 
 
-5.	Use 1_convert_site_files_to_codes.sh script to convert original sub IDs to new assigned 6-digit identifiers and to write all files needed to specific contrasts in /merged dir
-
-6.	Use 2_exclude_failed_QC_subs.sh to exclude subjects/runs which failed QC based on failed_QC.txt (same for both contrasts) that was prepared first in Excluded_data.xlsx 
-
-7.	For samples that had multiple runs/sessions, run 3_fsl_glm_to_aggregate_sessions_runs.sh script
+10.	For samples that had multiple runs/sessions, run 3_fsl_glm_to_aggregate_sessions_runs.sh script
 
 <p align="center">
   <img src="mega-analysis-methods.jpg" alt="Processing pipeline" width="1000"/><br/>
