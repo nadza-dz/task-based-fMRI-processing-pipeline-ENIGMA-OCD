@@ -114,26 +114,58 @@ Some preparation is needed before scripts can be run. Because each site used the
 
 For the circuit-level analyses, we have expectations about where activation will be found based on previous meta-analyses that were done either in healthy controls or in individuals with OCD on the task domains that we investigate here. We therefore first restrict analyses to these regions to investiggate the circuits of interest before we move to whole-brain analyses.
 
-1. Create ROI nifti images. Subcortical ROIs are created with Melbourne atlas (which is in the same MNI2009c asymmetrical space as HALFpipe uses). Spherical ROIs created with 5-mm sphere around coordinates identified in literature (Thorsen, Nitschke, Norman). 
-a.	Coordinates listed in /data/anw/anw-gold/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/ROIs/ROI_MNI6_coordinates.txt
-b.	Run script 4_make_spheres_MNI2009.sh to create spheres
-c.	Remove overlapping regions from spheres
-i.	Multiply spheres by hemisphere mask to get non-overlapping R/L spheres. Done with fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz  -roi 0 48.5 0 -1 0 -1 0 -1 –bin leftHemisphere 
-and
-fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz  -roi 48.5 -1 0 -1 0 -1 0 -1 -bin rightHemisphere
-1.	48.5 determined by taking half of dim 1 after running fslinfo tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz  
-d.	Cobmine regions with multiple coordinates into single image with both regions, eg:
-fslmaths FEF_r1.nii.gz -add FEF_r2.nii.gz FEF_r.nii.gz
-i.	This gives both spheres the same value in the atlas file, so when extracted later the activation reflects the average of both spheres
-ii.	For executive domain’s LOAD contrast, 13-ROI atlas should be used in final version
-e.	Extract volumes of ROIs into volumes.txt using 
-for ROI in *.nii.gz; do echo "${ROI%.nii.gz}" $(fslstats ${ROI} -V) 
-f.	For visualization on glass brain, use BrainNetViewer in Matlab, open Matlab on Remote Desktop, navigate to BrainNetViewer folder in Documents, and enter it using: BrainNet;
-i.	Go to File>Load file
-Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv
-Mapping file:
-3D nifti file with all ROIs 
-ii.	Play with load settings, surface opacity should be about 50%, Volume>type selection>ROI drawing
+1. Create ROI nifti images. Subcortical ROIs are created with the [Melbourne subcortical atlas](https://github.com/yetianmed/subcortex)(Tian et al., 2020) which is in the same MNI2009c asymmetrical space as HALFpipe uses. Cortical ROIs are created with 5-mm spheres around coordinates identified in literature (Thorsen et al., 2018; Nitschke et al., 2017; Norman et al., 2019). Create a `ROI_MNI6_coordinates.txt` file in which the ROI and its x, y, z coordinates are listed.
+   
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">Region</th>
+      <th align="left">X</th>
+      <th align="left">Y</th>
+      <th align="left">Z</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>LOC_l</td><td>-32</td><td>-90</td><td>-10</td></tr>
+    <tr><td>LOC_r</td><td>32</td><td>-90</td><td>-10</td></tr>
+    <tr><td>MTG_l</td><td>-58</td><td>-50</td><td>8</td></tr>
+    <tr><td>MTG_r</td><td>58</td><td>-50</td><td>8</td></tr>
+    <tr><td>vmPFC_l</td><td>-4</td><td>42</td><td>-18</td></tr>
+    <tr><td>vmPFC_r</td><td>4</td><td>42</td><td>-18</td></tr>
+    <tr><td>sgACC_l</td><td>-4</td><td>34</td><td>-8</td></tr>
+    <tr><td>sgACC_r</td><td>4</td><td>34</td><td>-8</td></tr>
+  </tbody>
+</table>
+
+<br><br>
+
+   
+2. Run `4_make_spheres_MNI2009.sh` script to create nifti images of ROIs in MNI space based on the `ROI_MNI6_coordinates.txt` file.
+   
+    a) If there are overlapping regions across spheres:
+   
+    - Remove overlapping regions from spheres by multiplying spheres by hemisphere mask to get non-overlapping right/left spheres.
+      ```bash
+      fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz -roi 0 48.5 0 -1 0 -1 0 -1 -bin leftHemisphere
+      fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz -roi 48.5 -1 0 -1 0 -1 0 -1 -bin rightHemisphere
+      ```
+   > 48.5 determined by taking half of dim 1 after running `fslinfo tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz`
+
+    b) If there are multiple coordinates for a single region:
+
+    - Cobmine regions with multiple coordinates into single image with both regions
+      ```bash
+      fslmaths FEF_r1.nii.gz -add FEF_r2.nii.gz FEF_r.nii.gz
+      ```
+      This gives both spheres the same value in the atlas file, so when extracted later the activation reflects the average of both spheres
+
+3. Extract volumes of ROIs into `volumes.txt`
+```bash
+for ROI in *.nii.gz; do
+echo "${ROI%.nii.gz}" $(fslstats ${ROI} -V >> volumes.txt
+```
+
+> For visualization of ROIs on glass brain, BrainNetViewer in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
 
 
 ## Publications using this pipeline
@@ -148,6 +180,8 @@ Dzinalija, N.,  van den Heuvel, O. A., ENIGMA-OCD Consortium, … , Vriend, C., 
 ## References
 
 Chen, G., Xiao, Y., Taylor, P. A., Rajendra, J. K., Riggins, T., Geng, F., Redcay, E., & Cox, R. W. (2019). Handling Multiplicity in Neuroimaging Through Bayesian Lenses with Multilevel Modeling. Neuroinformatics, 17(4), 515-545.
+
+Tian Y, Margulies SD, Breakspear M, Zalesky A. Topographic organization of the human subcortex unveiled with functional connectivity gradients. Nature Neuroscience. 2020;23(11):1421-32.
 
 van den Heuvel, O. A., Boedhoe, P., Bertolin, S., Bruin, W. B., Francks, C., Ivanov, I., Jahanshad, N., Kong, X. Z., Kwon, J. S., O'Neill, J., Paus, T., Patel, Y., Piras, F., Schmaal, L., Soriano-Mas, C., Spalletta, G., van Wingen, G. A., Yun, J. Y., Vriend, C., Simpson, H. B., … ENIGMA-OCD working group (2022). An overview of the first 5 years of the ENIGMA obsessive-compulsive disorder working group: The power of worldwide collaboration. Human Brain Mapping, 43(1), 23–36. 
 
