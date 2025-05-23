@@ -4,11 +4,27 @@ This manual guides you through completing group-level analyses on individual par
 
 ## Preprocessing
 
-All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed using [HALFpipe](https://github.com/HALFpipe/HALFpipe) (Waller et al., 2022), an open-source containerized processing pipeline that was used for pre-processing and first-level feature extraction. This [manual] explains how to process task data using the pipeline and 
+All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed using [HALFpipe](https://github.com/HALFpipe/HALFpipe) (Waller et al., 2022), an open-source containerized processing pipeline that was used for pre-processing and first-level feature extraction. The manual and acoompanying video tutorial explain how to process raw task data using HALFpipe for the ENIGMA-OCD task-based analyses.
+
+
+<p align="center">
+  <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSoqfKZvyctM/edit?usp=sharing&ouid=117298130236953584298&rtpof=true&sd=true">
+    <img src="halfpipe-manual-ENIGMA-OCD.JPG" alt="Tutorial video for HALFpipe preprocessing" width="400"/>
+  </a>
+</p>
+
+<p align="center">
+  <em>Manual for HALFpipe preprocessing:</em><br/>
+  <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Open document</a>
+</p>
+
+__
+
+
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">
-    <img src="youtube-tutorial-ENGIMA-OCD.JPG" alt="Tutorial video for HALFpipe preprocessing" width="400"/>
+    <img src="halfpipe-tutorial-ENIGMA-OCD.JPG" alt="Tutorial video for HALFpipe preprocessing" width="400"/>
   </a>
 </p>
 
@@ -18,29 +34,6 @@ All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed u
 </p>
 
 
-
-<p align="center">
-  <table style="border-collapse: collapse;">
-    <tr>
-      <td width="500" valign="middle" align="center" style="padding: 10px;">
-        <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSoqfKZvyctM/edit?usp=sharing">
-          <img src="halfpipe-manual-ENGIMA-OCD.JPG" alt="Manual for running group-level analyses" width="400" />
-        </a><br/>
-        <em>Manual for running group-level analyses</em><br/>
-        <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSoqfKZvyctM/edit?usp=sharing">Open document</a>
-      </td>
-      <td width="100" valign="middle" align="center" style="padding: 10px;">
-      </td>
-      <td width="500" valign="middle" align="center" style="padding: 10px;">
-        <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">
-          <img src="halfpipe-tutorial-ENGIMA-OCD.JPG" alt="Tutorial video for HALFpipe preprocessing" width="400" />
-        </a><br/>
-        <em>Tutorial video for HALFpipe preprocessing</em><br/>
-        <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Watch on YouTube</a>
-      </td>
-    </tr>
-  </table>
-</p>
 
 
 
