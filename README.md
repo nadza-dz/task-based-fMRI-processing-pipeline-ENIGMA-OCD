@@ -136,7 +136,7 @@ For the circuit-level analyses, we have expectations about where activation will
     <tr><td>sgACC_r</td><td>4</td><td>34</td><td>-8</td></tr>
   </tbody>
 </table>
-
+<p align="center"><em>ROI_MNI6_coordinates.txt</em></p>
 <br><br>
 
    
@@ -159,13 +159,45 @@ For the circuit-level analyses, we have expectations about where activation will
       ```
       This gives both spheres the same value in the atlas file, so when extracted later the activation reflects the average of both spheres
 
-3. Extract volumes of ROIs into `volumes.txt`
+3. Extract volumes of ROIs into `ROIs_volume.txt`. This will be used later for checking that there is sufficient signal in each ROI when extracting activation in the region.
+
 ```bash
 for ROI in *.nii.gz; do
-echo "${ROI%.nii.gz}" $(fslstats ${ROI} -V >> volumes.txt
+  echo "${ROI%.nii.gz}" $(fslstats ${ROI} -V >> ROIs_volume.txt
+done
 ```
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">Region</th>
+      <th align="left">Voxel Count</th>
+      <th align="left">Volume (mm³)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>amygdala_l</td><td>395</td><td>3160.000000</td></tr>
+    <tr><td>amygdala_r</td><td>380</td><td>3040.000000</td></tr>
+    <tr><td>LOC_l</td><td>81</td><td>648.000000</td></tr>
+    <tr><td>LOC_r</td><td>81</td><td>648.000000</td></tr>
+    <tr><td>MTG_l</td><td>81</td><td>648.000000</td></tr>
+    <tr><td>MTG_r</td><td>81</td><td>648.000000</td></tr>
+    <tr><td>putamen_l</td><td>919</td><td>7352.000000</td></tr>
+    <tr><td>putamen_r</td><td>940</td><td>7520.000000</td></tr>
+    <tr><td>sgACC_l</td><td>72</td><td>576.000000</td></tr>
+    <tr><td>sgACC_r</td><td>72</td><td>576.000000</td></tr>
+    <tr><td>vmPFC_l</td><td>72</td><td>576.000000</td></tr>
+    <tr><td>vmPFC_r</td><td>72</td><td>576.000000</td></tr>
+  </tbody>
+</table>
+<p align="center"><em>ROIs_volume.txt</em></p>
 
-> For visualization of ROIs on glass brain, BrainNetViewer in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
+<br><br>
+
+> For visualization of ROIs on a glass brain, BrainNetViewer in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
+
+4. Create input files for [Bayesian Region-of-Interest analyses](https://afni.nimh.nih.gov/pub/dist/doc/program_help/RBA.html) (Chen et al., 2019). These input files consist of extracted activation from ROIs as well as demographic and clinical variables that should be in the `RBA_input_demographics_only.csv` file. Activation can be extracted from ROIs using `5_extract_activation_from_ROIs.sh`. For whole-brain analyses, running a Bayesian model will not be possible in all voxels, therefore a parcellated approach is taken. Activation is averaged over regions of the [Schaefer cortical atlas](https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal) (Schaefer et al., 2018)
+Extract activation from Schaefer and Melbourne parcellations using 6_extract_activation_from_Schaefer_Melbourne_parcels.sh Individual input files for each model are created by the `7_create_RBA_input_models.R` script.
+
 
 
 ## Publications using this pipeline
