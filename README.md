@@ -69,7 +69,18 @@ Some preparation is needed before scripts can be run. Because each site used the
 
 <br><br>
 
-2.	By checking each site's HALFpipe `/derivatives/halfpipe` folder, make a mega-analytic dictionary that inventories the labels that were used at that site for first-level features including: 1) sample, 2) site, 3) site code (the one you assigned in step #2 above), 3) task, 4) the various contrasts created at the first level, and 5) the various confound-removal strategies used in the first-level analyses (in our case: 1) ICA-AROMA, 2) motion-correction with 6 rigid-body motion parameters, and 3) no correction). Save as `Mega_analysis_dictionary.csv`.
+2. Compile a covariate file `RBA_input_demographics_only.csv` of all relevant clinical and demographic data per subject. In these analyes this includes, in order of columns: 1) Subject ID, 2) Sample ID, 3) Task name, 4) Diagnosis (OCD/HC), 5) Sex, 6) Age, 7) Y-BOCS symptom severity score, 8) Medication status, and 9) Age of OCD onset.
+   
+| Subj       | Sample   | Task   | Diagnosis  | Sex | Age | Y-BOCS | Medication Status | Age of Onset    |
+|------------|----------|--------|-----|-----|-----|-------|-----|-------|
+| sub-550002 | BRAGA_ER |  Symtpom provocation task | OCD | m   | 21  | 19    | Med | Child |
+| sub-550003 | BRAGA_ER |  Symtpom provocation task | OCD | m   | 18  | 28    | Med | Child |
+| sub-550005 | BRAGA_ER |  Symtpom provocation task | OCD | f   | 55  | 28    | Med | Adult |
+<p align="center"><em>RBA_input_demographics_only.csv</em></p>
+
+<br><br>
+
+3.	By checking each site's HALFpipe `/derivatives/halfpipe` folder, make a mega-analytic dictionary that inventories the labels that were used at that site for first-level features including: 1) sample, 2) site, 3) site code (the one you assigned in step #2 above), 3) task, 4) the various contrasts created at the first level, and 5) the various confound-removal strategies used in the first-level analyses (in our case: 1) ICA-AROMA, 2) motion-correction with 6 rigid-body motion parameters, and 3) no correction). Save as `Mega_analysis_dictionary.csv`.
    
 | Sample              | Site           | Code | Task | Contrast1_EMOgtNEUT | Contrast2_OCDgtNEUT | Contrast3_FEARgtNEUT | Contrast4__OCDgtFEAR | ICAAROMA | MOTIONCORR | NOCORR |
 |:--------------------|:---------------|:-----|:-----|:-------------------|:-------------------|:--------------------|:-------------|:---------|:-----------|:-------|
@@ -79,9 +90,9 @@ Some preparation is needed before scripts can be run. Because each site used the
 
 <br><br>
 
-3.	Organize HALFpipe outputs by creating one main directory containing a folder for each site. Inside each site folder, create one directory per sample and place the sample's HALFpipe folder into it.
+4.	Organize HALFpipe outputs by creating one main directory containing a folder for each site. Inside each site folder, create one directory per sample and place the sample's HALFpipe folder into it.
 
-4.	Perform quality control (QC) using the [HALFpipe QC manual](https://drive.google.com/file/d/1TMg9MRvBwZO8HB1UJmH0gm4tYaBVnvcQ/view) and create a `failed_QC.txt` that lists all participants who failed QC. If a participant fails QC for one run but not another, the data from the remaining run can still be used - in this case mention which run was excluded in the `failed_QC.txt` file. If all runs should be excluded, leave the `Runs` column empty and the participant will be entirely excluded from further analyses.
+5.	Perform quality control (QC) using the [HALFpipe QC manual](https://drive.google.com/file/d/1TMg9MRvBwZO8HB1UJmH0gm4tYaBVnvcQ/view) and create a `failed_QC.txt` that lists all participants who failed QC. If a participant fails QC for one run but not another, the data from the remaining run can still be used - in this case mention which run was excluded in the `failed_QC.txt` file. If all runs should be excluded, leave the `Runs` column empty and the participant will be entirely excluded from further analyses.
 
 <table align="center">
   <thead>
@@ -101,11 +112,11 @@ Some preparation is needed before scripts can be run. Because each site used the
 <br><br>
 
 
-5.	Use `1_convert_site_files_to_codes.sh` script to create a cleaned and compiled version of all HALFpipe output. This will create a new `/merged` directory containing compiled files for each contrast of interest. These files aggregate all the data needed for group-level analyses, per participant. Additionally, the script assigns new participant IDs based on the files created above, and renames all files to ensure consistent naming and directory structure.
+6.	Use `1_convert_site_files_to_codes.sh` script to create a cleaned and compiled version of all HALFpipe output. This will create a new `/merged` directory containing compiled files for each contrast of interest. These files aggregate all the data needed for group-level analyses, per participant. Additionally, the script assigns new participant IDs based on the files created above, and renames all files to ensure consistent naming and directory structure.
 
-6.	Use `2_exclude_failed_QC_subs.sh` script to exclude participants who failed QC based on `failed_QC.txt`
+7.	Use `2_exclude_failed_QC_subs.sh` script to exclude participants who failed QC based on `failed_QC.txt`
    
-7.	Use `3_fsl_glm_to_aggregate_sessions_runs.sh` script to aggregate contrast maps across runs or sessions at the participant-level for samples that employed a task design with multiple runs or sessions. This step ensures that each participant contributes only one observation to the group-level analyses by averaging across all available runs or sessions with a simple intercept model.
+8.	Use `3_fsl_glm_to_aggregate_sessions_runs.sh` script to aggregate contrast maps across runs or sessions at the participant-level for samples that employed a task design with multiple runs or sessions. This step ensures that each participant contributes only one observation to the group-level analyses by averaging across all available runs or sessions with a simple intercept model.
    
 <br><br>
 
@@ -211,6 +222,8 @@ Dzinalija, N.,  van den Heuvel, O. A., ENIGMA-OCD Consortium, … , Vriend, C., 
 ## References
 
 Chen, G., Xiao, Y., Taylor, P. A., Rajendra, J. K., Riggins, T., Geng, F., Redcay, E., & Cox, R. W. (2019). Handling Multiplicity in Neuroimaging Through Bayesian Lenses with Multilevel Modeling. Neuroinformatics, 17(4), 515-545.
+
+Schaefer A, Kong R, Gordon ME, Laumann OT, Zuo X-N, Holmes JA, et al. Local-Global Parcellation of the Human Cerebral Cortex from Intrinsic Functional Connectivity MRI. Cerebral Cortex. 2018;28(9):3095-114.
 
 Tian Y, Margulies SD, Breakspear M, Zalesky A. Topographic organization of the human subcortex unveiled with functional connectivity gradients. Nature Neuroscience. 2020;23(11):1421-32.
 
