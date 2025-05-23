@@ -37,12 +37,13 @@ All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed u
 The analyses were intended for the three cognitive domains of the task-based analyses in ENIGMA-OCD: emotional (negative) valence, inhibitory control, and executive function. Available task data across the ENIGMA-OCD consortium was categorized into one of these three domains, each of which is subserved by a partly distinct cogntivive circuit (fronto-limbic, ventral cognitive, and dorsal cognitive). The scripts available here were designed to be compatible with the Amsterdam University Medical Center's Luna server cluster. On the Luna server, all scripts can be found in `/data/anw/anw-gold/NP/projects/data_ENIGMA-OCD/ENIGMA-TASK/scripts/tb-mega-pipeline`. 
 
 
-
-<img src="tb-fMRI-domains.png" alt="Cognitive domains" width="400"/>
+<p align="center">
+  <img src="tb-fMRI-domains.png" alt="Cognitive domains" width="700"/><br/>
+  <em>Cognitive domains investigated in task fMRI analyses</em>
+</p>
 
 Some preparation is needed before scripts can be run.
 
-<img src="mega-analysis-methods.jpg" alt="Processing pipeline" width="400"/>
 
 1.	Assign 3-digit site codes to each site, and a new 6-digit number to each subject, in Site_codes.xslx file. Save as .csv. 
 
@@ -58,7 +59,10 @@ Some preparation is needed before scripts can be run.
 
 7.	For samples that had multiple runs/sessions, run 3_fsl_glm_to_aggregate_sessions_runs.sh script
 
-
+<p align="center">
+  <img src="mega-analysis-methods.jpg" alt="Processing pipeline" width="1000"/><br/>
+  <em>Processing pipeline in task-based fMRI mega-analyses</em>
+</p>
 
 
 
