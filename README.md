@@ -17,6 +17,33 @@ All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed u
   <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Watch on YouTube</a>
 </p>
 
+
+
+<p align="center">
+  <table style="border-collapse: collapse;">
+    <tr>
+      <td width="500" valign="middle" align="center" style="padding: 10px;">
+        <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSoqfKZvyctM/edit?usp=sharing">
+          <img src="halfpipe-manual-ENGIMA-OCD.JPG" alt="Manual for running group-level analyses" width="400" />
+        </a><br/>
+        <em>Manual for running group-level analyses</em><br/>
+        <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSoqfKZvyctM/edit?usp=sharing">Open document</a>
+      </td>
+      <td width="100" valign="middle" align="center" style="padding: 10px;">
+      </td>
+      <td width="500" valign="middle" align="center" style="padding: 10px;">
+        <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">
+          <img src="halfpipe-tutorial-ENGIMA-OCD.JPG" alt="Tutorial video for HALFpipe preprocessing" width="400" />
+        </a><br/>
+        <em>Tutorial video for HALFpipe preprocessing</em><br/>
+        <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Watch on YouTube</a>
+      </td>
+    </tr>
+  </table>
+</p>
+
+
+
 ## Publications using this pipeline
 
 Dzinalija, N., Vriend, C., Waller, L., Simpson, H. B., Ivanov, I., Agarwal, S. M., Alonso, P., Backhausen, L. L., Balachander, S., Broekhuizen, A., Castelo-Branco, M., Costa, A. D., Cui, H., Denys, D., Duarte, I. C., Eng, G. K., Erk, S., Fitzsimmons, S. M. D. D., Ipser, J., Jaspers-Fayer, F., … van den Heuvel, O. A. (2024). Negative valence in Obsessive-Compulsive Disorder: A worldwide mega-analysis of task-based functional neuroimaging data of the ENIGMA-OCD consortium. Biological psychiatry, S0006-3223(24)01819-5. 
