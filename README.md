@@ -206,8 +206,19 @@ done
 
 > For visualization of ROIs on a glass brain, BrainNetViewer in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
 
-4. Create input files for [Bayesian Region-of-Interest analyses](https://afni.nimh.nih.gov/pub/dist/doc/program_help/RBA.html) (Chen et al., 2019). These input files consist of extracted activation from ROIs as well as demographic and clinical variables that should be in the `RBA_input_demographics_only.csv` file. Activation can be extracted from ROIs using `5_extract_activation_from_ROIs.sh`. For whole-brain analyses, running a Bayesian model will not be possible in all voxels, therefore a parcellated approach is taken. Activation is averaged over regions of the functionally-defined [Schaefer cortical atlas](https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal) (Schaefer et al., 2018) using the `6_extract_activation_from_Schaefer_Melbourne_parcels.sh` script. This also includes the regions of the subcortex from the Melbourne atlas listed above. Individual input files for each model are created by the `7_create_RBA_input_models.R` script.
+4. Create input files for [Bayesian Region-of-Interest analyses](https://afni.nimh.nih.gov/pub/dist/doc/program_help/RBA.html) (Chen et al., 2019). These input files consist of extracted activation from ROIs as well as demographic and clinical variables that should be in the `RBA_input_demographics_only.csv` file above. Activation can be extracted from ROIs using `5_extract_activation_from_ROIs.sh`. For whole-brain analyses, running a Bayesian model will not be possible in all voxels, therefore a parcellated approach is taken. Activation is averaged over regions of the functionally-defined [Schaefer cortical atlas](https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal) (Schaefer et al., 2018) using the `6_extract_activation_from_Schaefer_Melbourne_parcels.sh` script. This also includes the regions of the subcortex from the Melbourne atlas listed above. Individual input files for each model are created by the `7_create_RBA_input_models.R` script.
 
+#### Running models
+
+## Missing data
+
+To help identify missing data the scripts output files that help identify the reasons for which participants were excluded from analyses, or which data is missing. There are three types of excluded participants:
+1. Participants excluded due to failing quality control checks - visible in `failed_QC.txt`
+2. Participants excluded due to too much motion (framewise displacement >1.0) - visible in `failed_FD1.0.txt` 
+3. Participants for who a portion of the first-level processing pipeline failed to run, for example the ICA-AROMA confound removal - visible in `failed_ICA.txt`
+4. Participants who have missing data for some brain regions due to having <30% of the ROI/parcel volume in the field of view  - visible in `insufficient_volume_ROIs.txt` for defined ROIs and `insufficient_volume_parcels.txt` for Schaefer/Melbourne parcellated atlas regions
+
+All these files will be written to the `/merged` directory's contrast-of-interest folders (except `failed_QC.txt` which is made in Preparation step #5 above), making it easy to inspect output.
 
 
 ## Publications using this pipeline
