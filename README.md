@@ -357,12 +357,56 @@ A new method was developed within ENIGMA specifically for mega-analyses of multi
 
 1.	Open a large interactive slurm session (I used 24 CPUs and 50GB RAM)
 2.	Download entire [IBMMA github repository](https://github.com/sundelinustc/IBMMA/tree/2024-10-21) and unzip it
-3.	Prepare `path_para.xlsx` file according to instructions in the file
-4.	Prepare covariates file  
-    a.	Must have column `fID` with following structure: sample_subject  
-  	    i.	Since our sample directory is halfpipe output for a particular contrast, this should be for ex `halfpipe_sub-916001` 
-    b.	Must have no string variables, all string variables should be converted to numerical, including `sample` 
-5)	Load modules needed
+3.	Prepare `path_para.xlsx` file according to instructions in the file. See [path_para.xlsx](files/path_para.xlsx) for an example.
+4. Prepare covariates file
+   
+    a. Covariate file must have first column `fID` with following structure: sample_subject
+   
+    - Since our sample directory is named `halfpipe` for each contrast of interest in each domain, this should be for example: `halfpipe_sub-916001`
+     	  	
+    b.	Covariate file should have no string variables, all string variables should be converted to numerical, including `sample`. If this has not been done, ensure the `predictors` sheet of the `path_para.xlsx` file contains a mapping of string variables to numeric values.
+
+| fID                | Subject     | Sample     | TASK | DX  | YBOCS | AGE | SEX | AO    | MED  |
+|--------------------|--------------|------------|------|-----|--------|-----|-----|-------|------|
+| halfpipe_sub-157001 | sub-157001   | 1 | TOL  | OCD | 28     | 42  | m   | Adult | Unmed |
+| halfpipe_sub-157002 | sub-157002   | 1 | TOL  | HC  |        | 39  | m   | HC    | HC    |
+| halfpipe_sub-157003 | sub-157003   | 1 | TOL  | OCD | 36     | 36  | f   | Adult | Med   |
+
+<br><br>
+
+5.	Load modules needed:
+    ```bash
+    Anaconda3 
+    module load R
+    module load rstudio
+    ```
+
+6. Open rstudio (type rstudio & in terminal) and install this R package first: 
+install.packages('pacman')
+ii.	install these R packages next:
+library(pacman)
+packages <- c('devtools','oro.nifti','RNifti')
+do.call(p_load, as.list(packages))
+install.packages("remotes")
+library(remotes)
+remotes::install_github("spisakt/pTFCE@v0.2.2.1")
+iii.	based on error messages as toolbox runs, it may be necessary to install other packages into home/anw/username/R/x86_64-pc-linux-gnu-library/4.4 using same method as above
+b.	raise maximum number of network sockets open simultaneously
+ulimit -n 5000 
+6)	Adjust R_modelling_parallel.R script to limit number of cores to slightly below number that the slurm session has, in 2 places in the script:
+cl <- makeCluster(cores)  --> cl <- makeCluster(20)  
+cl <- makeCluster(num_cores) --> cl <- makeCluster(20)
+7)	Adjust R_modelling_parallel.R script to remove one variable being written 
+foreach(i = 1:dim(term_cols)[1], .packages = packages) %dopar% {save_data <-save_data(term_cols[i,]) } -->  foreach(i = 1:dim(term_cols)[1], .packages = packages) %dopar% {save_data(term_cols[i, ])  }
+8)	load python environment
+a.	conda activate myenv
+i.	There may be a number of packages that need to be installed, this will be signaled by errors in running the ibmma.py script and can be done with
+1.	pip install <package>
+9)	Run ibmma.py script 
+a.	python ibmma.py
+
+    
+
 
 
 ## Missing data
