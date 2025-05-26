@@ -153,16 +153,30 @@ For the circuit-level analyses, we have expectations about where activation will
    
 2. Use `4_make_spheres_MNI2009.sh` script to create nifti images of ROIs in MNI2009c asymmetrical space based on the `ROI_MNI6_coordinates.txt` file.
    
-    a) If there are overlapping regions across spheres:
+    a) If there are overlapping regions across spheres close to midline of brain:
    
-    - Remove overlapping regions from spheres by multiplying spheres by hemisphere mask to get non-overlapping right/left spheres.
+    - Remove overlapping regions from lateralized spheres by multiplying spheres by corresponding hemisphere mask to get non-overlapping lateralized regions.
       ```bash
       fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz -roi 0 48.5 0 -1 0 -1 0 -1 -bin leftHemisphere
       fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz -roi 48.5 -1 0 -1 0 -1 0 -1 -bin rightHemisphere
+      fslmaths SMA_r.nii.gz -mul leftHemisphere.nii.gz SMA_r_lateralized.nii.gz
+      mv SMA_r_lateralized.nii.gz SMA_r.nii.gz
+      fslmaths SMA_l.nii.gz -mul rightHemisphere.nii.gz SMA_l_lateralized.nii.gz
+      mv SMA_l_lateralized.nii.gz SMA_l.nii.gz
       ```
    > 48.5 determined by taking half of dim 1 after running `fslinfo tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz`
-
-    b) If there are multiple coordinates for a single region:
+   
+    b) If there are overlapping regions across spheres close to one another:
+   
+    - Remove overlapping regions from spheres by obtaining mutually exclusive region of each sphere.
+      ```bash
+      fslmaths sgACC.nii.gz -mul vmPFC.nii.gz sgACC_vmPFC_intersect.nii.gz
+      fslmaths sgACC.nii.gz -sub sgACC_vmPFC_intersect.nii.gz sgACC_unique.nii.gz
+      mv sgACC_unique.nii.gz sgACC.nii.gz 
+      fslmaths vmPFC.nii.gz -sub sgACC_vmPFC_intersect.nii.gz vmPFC_unique.nii.gz
+      mv vmPFC_unique.nii.gz vmPFC.nii.gz
+      ```
+    c) If there are multiple coordinates for a single region:
 
     - Cobmine regions with multiple coordinates into single image with both regions
       ```bash
@@ -170,7 +184,7 @@ For the circuit-level analyses, we have expectations about where activation will
       ```
       This gives both spheres the same value in the atlas file, so when extracted later the activation reflects the average of both spheres
 
-3. Extract volumes of ROIs into `ROIs_volume.txt`. This will be used later for checking that there is sufficient signal in each ROI when extracting activation in the region.
+4. Extract volumes of ROIs into `ROIs_volume.txt`. This will be used later for checking that there is sufficient signal in each ROI when extracting activation in the region.
 
 ```bash
 for ROI in *.nii.gz; do
