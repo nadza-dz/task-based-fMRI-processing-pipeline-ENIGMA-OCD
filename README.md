@@ -250,7 +250,7 @@ While we control for site effects using sample as a random intercept, we also wa
 1. Use `8-2b_submit_sbatch_RBA_ROI_jackknife.sh` wrapper script, which calls `8-2a_syntax_RBA_ROI_jackknife.sh`, to run leave-one-sample-out analyses for each model. I did this on my main contrast of interest for each domain (or main two contrasts in the negative emotional valence domain) as the other contrasts of interest already represented a sub-group of all samples. 
 
 
-### Plotting results
+### Visualizing results
 
 #### ROI ridge plots
 1.	Once ROI RBA has run, 9b_improve_RBA_ridge_plots_ROI.R (script) and alphabet_ridge.R (function) used to remake all figures for ROIs. Make sure to module load R/4.1.3 as all necessary packages are loaded on this version of R
@@ -260,15 +260,28 @@ Jackknife raincloud plots
 a.	This script also creates a ${contrast}_${model}_P_plus_range.csv for each model and contrast that is needed for 9b script above
 
 <p align="center">
-  <img src="" alt="Cognitive domains" width="600"/><br/>
-  <em>Cognitive domains investigated in task fMRI analyses</em>
+  <img src="How_to_read_RBA_ridge_plots.jpg" alt="Cognitive domains" width="600"/><br/>
+  <em>Example of ROI activation ridge plot</em>
 </p>
 
 <br><br>
 
+Consider a hypothetical analysis of the effects in four regions. In Regions 1 and 2 there is very strong evidence of a positive effect as the entire AUC is to the right of the no-effect line (P+=1.0), denoting a nearly 100% probability of the effect being positive in these regions. Region 1 has a larger effect size than Region 2 as the mode of the distribution is further away from the no-effect line. In Region 4 there is moderate evidence for a negative effect as AUC is largely to the left of the no-effect line (P+=0.08). Small values of P+ convey evidence that the effect is negative – a P+ value of 0.08 indicates that the probability of the effect being positive is only 8%, so the probability of it being negative is 92%. For Region 3, the distribution crosses the no-effect line with 25% of the AUC to the right of the no effect line (P+=0.25), meaning there is no strong evidence of a positive effect, but also no strong evidence of a negative effect in this region. 
+
 #### Cortical whole-brain figures
-3.	For whole-brain RBA alphabetical figures 9c_improve_RBA_ridge_plots_whole-brain.R (script) used to remake all figures. 
-4.	For whole-brain ENIGMA toolbox images, 9d_extract_P_plus_values_SchaeferMelbourne _from_RBA_output.R script extracts P+ values from RBA analyses for input into ENIGMA toolbox and 9e_enigma-toolbox-RBA_Schaefer200.py script makes ENIGMA toolbox figures for Schaefer 200-parcel cortical atlas
+
+1.	Use `9c_improve_RBA_ridge_plots_whole-brain.R` script to make Bayesian RBA ridge plots in alphabetical order.
+   
+2.	Use `9d_extract_P_plus_values_SchaeferMelbourne_from_RBA_output.R`script to extract P+ values from RBA analyses for input into
+
+3.	To visualize cortical activation using [ENIGMA toolbox](https://enigma-toolbox.readthedocs.io/en/latest/index.html), use `9e_enigma-toolbox-RBA_Schaefer200.py` script.
+
+<p align="center">
+  <img src="cortical-figure.jpg" alt="Cognitive domains" width="800"/><br/>
+  <em>Example of cortical activation figure using ENIGMA Toolbox</em>
+</p>
+
+<br><br>   
    
 #### Subcortical region figures
 
@@ -276,6 +289,12 @@ a.	This script also creates a ${contrast}_${model}_P_plus_range.csv for each mod
   
 2. To visualize subcortical activation, open [MRIcroGL](https://www.nitrc.org/projects/mricrogl). *Note:* MRIcroGL will not work on Luna, therefore you must open it on your own laptop or on Remote Desktop (10.119.129.24; you must be given access to it first). Open Scripting, then copy-paste `9g_MRIcroGL_render.py` script into the window and run with command+R. The `rbacol.clut` file must be in the `Resources\lut` folder of MRIcroGL. This will create a screenshot of the medial and lateral views of the subcortex for each model.
 
+<p align="center">
+  <img src="subcortical-figure.png" alt="Cognitive domains" width="600"/><br/>
+  <em>Example of subcortical activation figure using MRIcroGL</em>
+</p>
+
+<br><br>
 
 ### Demographics
 
