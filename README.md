@@ -125,7 +125,7 @@ Some preparation is needed before scripts can be run. Because each site used the
 
 For the circuit-level analyses, we have expectations about where activation will be found based on previous meta-analyses that were done either in healthy controls or in individuals with OCD on the task domains that we investigate here. We therefore first restrict analyses to these regions to investiggate the circuits of interest before we move to whole-brain analyses.
 
-1. Create ROI nifti images. Subcortical ROIs are created with the [Melbourne subcortical atlas](https://github.com/yetianmed/subcortex)(Tian et al., 2020) which is in the same MNI2009c asymmetrical space as HALFpipe uses. Cortical ROIs are created as 5-mm spheres around coordinates identified in literature (Thorsen et al., 2018; Nitschke et al., 2017; Norman et al., 2019). However, the coordinates from these papers were originally not in the MNI2009c asymmetrical space but rather in older MNI version 6 space, and need to be converted first. Create a `ROI_MNI6_coordinates.txt` file in which each cortical ROI and its x, y, z coordinates in MNI v. 6 space are listed.
+1. Create ROI nifti images. Subcortical ROIs are created with the [Melbourne subcortical atlas](https://github.com/yetianmed/subcortex) (Tian et al., 2020) which is in the same MNI2009c asymmetrical space as HALFpipe uses. Cortical ROIs are created as 5-mm spheres around coordinates identified in literature (Thorsen et al., 2018; Nitschke et al., 2017; Norman et al., 2019). However, the coordinates from these papers were originally not in the MNI2009c asymmetrical space but rather in older MNI version 6 space, and need to be converted first. Create a `ROI_MNI6_coordinates.txt` file in which each cortical ROI and its x, y, z coordinates in MNI v. 6 space are listed.
    
 <table align="center">
   <thead>
@@ -160,8 +160,8 @@ For the circuit-level analyses, we have expectations about where activation will
       fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz -roi 0 48.5 0 -1 0 -1 0 -1 -bin leftHemisphere
       fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz -roi 48.5 -1 0 -1 0 -1 0 -1 -bin rightHemisphere
       fslmaths SMA_r.nii.gz -mul leftHemisphere.nii.gz SMA_r_lateralized.nii.gz
-      mv SMA_r_lateralized.nii.gz SMA_r.nii.gz
       fslmaths SMA_l.nii.gz -mul rightHemisphere.nii.gz SMA_l_lateralized.nii.gz
+      mv SMA_r_lateralized.nii.gz SMA_r.nii.gz
       mv SMA_l_lateralized.nii.gz SMA_l.nii.gz
       ```
    > 48.5 determined by taking half of dim 1 after running `fslinfo tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz`
@@ -172,8 +172,8 @@ For the circuit-level analyses, we have expectations about where activation will
       ```bash
       fslmaths sgACC.nii.gz -mul vmPFC.nii.gz sgACC_vmPFC_intersect.nii.gz
       fslmaths sgACC.nii.gz -sub sgACC_vmPFC_intersect.nii.gz sgACC_unique.nii.gz
-      mv sgACC_unique.nii.gz sgACC.nii.gz 
       fslmaths vmPFC.nii.gz -sub sgACC_vmPFC_intersect.nii.gz vmPFC_unique.nii.gz
+      mv sgACC_unique.nii.gz sgACC.nii.gz
       mv vmPFC_unique.nii.gz vmPFC.nii.gz
       ```
     c) If there are multiple coordinates for a single region:
@@ -255,7 +255,7 @@ The same models are run for the whole-brain parcellations as for the ROI analyse
 
 1. Use `8-3b_submit_sbatch_RBA_whole-brain.sh` wrapper script, which calls the RBA syntax script `8-3a_syntax_RBA_whole-brain.sh`.
 
-*Note:* The maximum length of a single job on the Luna server is 7 days (when using the `luna-cpu-long partition`). The whole-brain sbatch script is also set to 7 days as the whole-brain models with 200 Schaefer parcellations took about 5.5 days to run.
+*Note:* The maximum length of a single job on the Luna server is 7 days (when using the `luna-cpu-long` partition) - the whole-brain sbatch script is therefore also set to 7 days as the whole-brain models with 200 Schaefer parcellations took about 5.5 days to run.
 
 #### Sensitivity analyses
 
@@ -281,14 +281,41 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
 
 #### Leave-one-sample-out raincloud plots  
 
-1. Use `9a_ROI_jackknife_raincloud_plots.R` script which calls `raincloud_plot.R` function to create raincloud plots of leave-one-sample-out sensitivity analysis ROI effects.	This script also creates a `${contrast}_${model}_P_plus_range.csv` file for each model and contrast that is needed for script `9b_improve_RBA_ridge_plots_ROI.R` above.
+1. Use `9a_ROI_jackknife_raincloud_plots.R` script which calls `raincloud_plot.R` function to create raincloud plots of leave-one-sample-out sensitivity analysis for ROI effects. The raincloud plots visualize how the P+ value changes for each ROI as one sample at a time is removed from analysis. This script also creates a P+ range file for each model and contrast in the format `{contrast}_{model}_P_plus_range.csv` that is needed for script `9b_improve_RBA_ridge_plots_ROI.R` above.
 
 <p align="center">
-  <img src="" alt="Cognitive domains" width="800"/><br/>
+  <img src="raincloud-figure.jpg" alt="Cognitive domains" width="600"/><br/>
   <em>Example of raincloud plot for leave-one-sample-out sensitivity analysis</em>
 </p>
 
 <br><br>      
+
+<table align="center">
+  <thead>
+    <tr>
+      <th align="left">ROI</th>
+      <th align="left">Min_P</th>
+      <th align="left">Max_P</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>LOC (L)</td><td>0.02</td><td>0.21</td></tr>
+    <tr><td>LOC (R)</td><td>0.14</td><td>0.54</td></tr>
+    <tr><td>MTG (L)</td><td>0.65</td><td>0.98</td></tr>
+    <tr><td>MTG (R)</td><td>0.30</td><td>0.61</td></tr>
+    <tr><td>amygdala (L)</td><td>0.33</td><td>0.60</td></tr>
+    <tr><td>amygdala (R)</td><td>0.32</td><td>0.57</td></tr>
+    <tr><td>putamen (L)</td><td>0.34</td><td>0.59</td></tr>
+    <tr><td>putamen (R)</td><td>0.38</td><td>0.61</td></tr>
+    <tr><td>sgACC (L)</td><td>0.30</td><td>0.68</td></tr>
+    <tr><td>sgACC (R)</td><td>0.26</td><td>0.61</td></tr>
+    <tr><td>vmPFC (L)</td><td>0.18</td><td>0.48</td></tr>
+    <tr><td>vmPFC (R)</td><td>0.28</td><td>0.61</td></tr>
+  </tbody>
+</table>
+<p align="center"><em>P_plus_range.csv</em></p>
+
+<br><br>
 
 #### Cortical whole-brain figures
 
