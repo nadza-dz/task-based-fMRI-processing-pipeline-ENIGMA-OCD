@@ -10,14 +10,14 @@ All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed u
   <tr>
     <td align="center">
       <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSofKZvyctM/edit?usp=sharing&ouid=117298130236953584298&rtpof=true&sd=true">
-        <img src="halfpipe-manual-ENIGMA-OCD.JPG" alt="Manual for HALFpipe preprocessing" style="max-width: 200px;">
+        <img src="images/halfpipe-manual-ENIGMA-OCD.jpg" alt="Manual for HALFpipe preprocessing" style="max-width: 200px;">
       </a><br />
       <em>Manual for HALFpipe preprocessing:</em><br />
       <a href="https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSofKZvyctM/edit?usp=sharing&ouid=117298130236953584298&rtpof=true&sd=true">Open document</a>
     </td>
     <td align="center">
       <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">
-        <img src="halfpipe-tutorial-ENIGMA-OCD.JPG" alt="Tutorial video for HALFpipe preprocessing" style="max-width: 200px;">
+        <img src="images/halfpipe-tutorial-ENIGMA-OCD.jpg" alt="Tutorial video for HALFpipe preprocessing" style="max-width: 200px;">
       </a><br />
       <em>Tutorial video for HALFpipe preprocessing:</em><br />
       <a href="https://www.youtube.com/watch?v=zruXn-JLE5c">Watch on YouTube</a>
@@ -30,7 +30,7 @@ All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed u
 The analyses were intended for the three cognitive domains of the task-based analyses in ENIGMA-OCD: emotional (negative) valence, inhibitory control, and executive function. Available task data across the ENIGMA-OCD consortium was categorized into one of these three domains, each of which is subserved by a partly distinct cogntivive circuit (fronto-limbic, ventral cognitive, and dorsal cognitive). The scripts available here were designed to be compatible with the Amsterdam University Medical Center's Luna server cluster. On the Luna server, all scripts can be found in `/data/anw/anw-work/NP/projects/data_ENIGMA-OCD/ENIGMA-TASK/scripts/tb-mega-pipeline`. 
 
 <p align="center">
-  <img src="tb-fMRI-domains.png" alt="Cognitive domains" width="600"/><br/>
+  <img src="images/tb-fMRI-domains.png" alt="Cognitive domains" width="600"/><br/>
   <em>Cognitive domains investigated in task fMRI analyses</em>
 </p>
 
@@ -39,7 +39,7 @@ The analyses were intended for the three cognitive domains of the task-based ana
 In the figure below the processing pipeline is depicted for one of the domains - negative emotional valence. Using the manuals linked above, the steps of `Harmonzied processing` and `First-level contrast` extraction have already taken place. This manual will explain how to use the available scripts to execute `Mega-analysis`, investigating both case-control effects and the effects of clinical characteristics of OCD, such as the age of OCD onset, medication status, and symptom severity. Region of interest (ROI) analyses in the relevant neural circuit for each domain are conducted at the group-level, as well as whole-brain analyses via two separate approaches (not pictured). We refer to these analyses as mega-analyses because we use individual-participant data when combining datasets of multiple samples, which is a different than the approach meta-analyses typically take. Meta-analyses usually rely on summary statistics at the sample level, aggregating data across samples, but not across individual participants. A huge advantage of our mega-analytic approach is that we are able to investigate the effects of participant-level variables, such as medication status or symptom severity, on brain activity in a way that meta-analyses cannot.
 
 <p align="center">
-  <img src="mega-analysis-methods.jpg" alt="Processing pipeline" width="1000"/><br/>
+  <img src="images/mega-analysis-methods.jpg" alt="Processing pipeline" width="1000"/><br/>
   <em>Processing pipeline in task-based fMRI mega-analyses</em>
 </p>
 
@@ -121,7 +121,7 @@ Some preparation is needed before scripts can be run. Because each site used the
 <br><br>
 
 
-### Region-Of-Interest analyses
+### Region-of-Interest analyses
 
 For the circuit-level analyses, we have expectations about where activation will be found based on previous meta-analyses that were done either in healthy controls or in individuals with OCD on the task domains that we investigate here. We therefore first restrict analyses to these regions to investiggate the circuits of interest before we move to whole-brain analyses.
 
@@ -228,7 +228,9 @@ Two approaches are taken to whole-brain analyses here. Typically, when we speak 
 
 This approach also has the advantage that it solves another problem of our dataset. Because our analyses include a large number of participants drawn from many different samples, the brain coverage across participants can vary substantially. By averaging activation over larger cortical regions, we can retain more participants in the analysis—even if the exact voxels imaged vary slightly between them.
 
-1. Use `6_extract_activation_from_Schaefer_Melbourne_parcels.sh` script to extract activation from Schaefer cortical atlas parcels and Melbourne subcortical atlas regions. 
+1. Use `6_extract_activation_from_Schaefer_Melbourne_parcels.sh` script to extract activation from Schaefer cortical atlas parcels and Melbourne subcortical atlas regions.
+
+The second approach to whole-brain analyses does use a voxel-wise method, [see below](#Voxel-wise-whole-brain-analyses-IBMMA-toolbox).
 
 ### Running models
 
@@ -261,7 +263,7 @@ The same models are run for the whole-brain parcellations as for the ROI analyse
 
 While we control for site effects using sample as a random intercept, we also want to run a separate sensitivity analysis for the ROI analyses by removing one sample at a time and running the same models to check whether any samples have a large effect on the results. 
 
-1. Use `8-2b_submit_sbatch_RBA_ROI_jackknife.sh` wrapper script, which calls `8-2a_syntax_RBA_ROI_jackknife.sh`, to run leave-one-sample-out analyses for each model. I did this on my main contrast of interest for each domain (or main two contrasts in the negative emotional valence domain) as the other contrasts of interest already represented a sub-group of all samples. 
+1. Use `8-2b_submit_sbatch_RBA_ROI_jackknife.sh` wrapper script, which calls `8-2a_syntax_RBA_ROI_jackknife.sh`, to run leave-one-sample-out analyses for each model. I did this on the main contrast of interest for each domain (or main two contrasts in the negative emotional valence domain) as the other contrasts of interest already represented a sub-group of all samples. 
 
 
 ### Visualizing results
@@ -273,7 +275,7 @@ The Bayesian RBA tool outputs it's own visualization of regional effects for eac
 1.	Use `9b_improve_RBA_ridge_plots_ROI.R` script which calls `alphabet_ridge.R` function to remake all figures for ROI analyses. The `9b_improve_RBA_ridge_plots_ROI.R` script optionally takes a range of P+ values from the leave-one-sample-out sensitivity analyses performed above, which is created using the `9a_ROI_jackknife_raincloud_plots.R` script below. 
 
 <p align="center">
-  <img src="How_to_read_RBA_ridge_plots.jpg" alt="Cognitive domains" width="600"/><br/>
+  <img src="images/how_to_read_RBA_ridge_plots.jpg" alt="Cognitive domains" width="600"/><br/>
   <em>Example of ROI activation ridge plot</em>
 </p>
 
@@ -284,7 +286,7 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
 1. Use `9a_ROI_jackknife_raincloud_plots.R` script which calls `raincloud_plot.R` function to create raincloud plots of leave-one-sample-out sensitivity analysis for ROI effects. The raincloud plots visualize how the P+ value changes for each ROI as one sample at a time is removed from analysis. This script also creates a P+ range file for each model and contrast in the format `{contrast}_{model}_P_plus_range.csv` that is needed for script `9b_improve_RBA_ridge_plots_ROI.R` above.
 
 <p align="center">
-  <img src="raincloud-figure.jpg" alt="Cognitive domains" width="600"/><br/>
+  <img src="images/raincloud-figure.jpg" alt="Cognitive domains" width="800"/><br/>
   <em>Example of raincloud plot for leave-one-sample-out sensitivity analysis</em>
 </p>
 
@@ -299,18 +301,12 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
     </tr>
   </thead>
   <tbody>
-    <tr><td>LOC (L)</td><td>0.02</td><td>0.21</td></tr>
-    <tr><td>LOC (R)</td><td>0.14</td><td>0.54</td></tr>
-    <tr><td>MTG (L)</td><td>0.65</td><td>0.98</td></tr>
-    <tr><td>MTG (R)</td><td>0.30</td><td>0.61</td></tr>
-    <tr><td>amygdala (L)</td><td>0.33</td><td>0.60</td></tr>
-    <tr><td>amygdala (R)</td><td>0.32</td><td>0.57</td></tr>
-    <tr><td>putamen (L)</td><td>0.34</td><td>0.59</td></tr>
-    <tr><td>putamen (R)</td><td>0.38</td><td>0.61</td></tr>
-    <tr><td>sgACC (L)</td><td>0.30</td><td>0.68</td></tr>
-    <tr><td>sgACC (R)</td><td>0.26</td><td>0.61</td></tr>
-    <tr><td>vmPFC (L)</td><td>0.18</td><td>0.48</td></tr>
-    <tr><td>vmPFC (R)</td><td>0.28</td><td>0.61</td></tr>
+    <tr><td>caudate (L)</td><td>0.13</td><td>0.26</td></tr>
+    <tr><td>caudate (R)</td><td>0.11</td><td>0.26</td></tr>
+    <tr><td>cingulate (L)</td><td>0.36</td><td>0.61</td></tr>
+    <tr><td>cingulate (R)</td><td>0.25</td><td>0.45</td></tr>
+    <tr><td>dlPFC (L)</td><td>0.04</td><td>0.20</td></tr>
+    <tr><td>dlPFC (R)</td><td>0.04</td><td>0.22</td></tr>
   </tbody>
 </table>
 <p align="center"><em>P_plus_range.csv</em></p>
@@ -321,12 +317,12 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
 
 1.	Use `9c_improve_RBA_ridge_plots_whole-brain.R` script to make Bayesian RBA ridge plots in alphabetical order.
    
-2.	Use `9d_extract_P_plus_values_SchaeferMelbourne_from_RBA_output.R`script to extract P+ values from RBA analyses for input into
+2.	Use `9d_extract_P_plus_values_SchaeferMelbourne_from_RBA_output.R`script to extract P+ values from RBA analyses for each parcellated cortical brain region. 
 
-3.	To visualize cortical activation using [ENIGMA toolbox](https://enigma-toolbox.readthedocs.io/en/latest/index.html), use `9e_enigma-toolbox-RBA_Schaefer200.py` script.
+3.	To visualize cortical activation using [ENIGMA toolbox](https://enigma-toolbox.readthedocs.io/en/latest/index.html), use `9e_enigma-toolbox-RBA_Schaefer200.py` script. The ENIGMA toolbox maps the parcellated activation's P+ values to a flattened surface space.  
 
 <p align="center">
-  <img src="cortical-figure.jpg" alt="Cognitive domains" width="800"/><br/>
+  <img src="images/cortical-figure.jpg" alt="Cognitive domains" width="800"/><br/>
   <em>Example of cortical activation figure using ENIGMA Toolbox</em>
 </p>
 
@@ -336,18 +332,38 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
 
 1. Use `9f_create_3D_niftis_RBA_Melbourne32.sh` script to create a 3D nifti file of the 32 regions in the Melbourne subcortical atlas where each region has it’s corresponding P+ value.
   
-2. To visualize subcortical activation, open [MRIcroGL](https://www.nitrc.org/projects/mricrogl). *Note:* MRIcroGL will not work on Luna, therefore you must open it on your own laptop or on Remote Desktop (10.119.129.24; you must be given access to it first). Open Scripting, then copy-paste `9g_MRIcroGL_render.py` script into the window and run with command+R. The `rbacol.clut` file must be in the `Resources\lut` folder of MRIcroGL. This will create a screenshot of the medial and lateral views of the subcortex for each model.
+2. To visualize subcortical activation, open [MRIcroGL](https://www.nitrc.org/projects/mricrogl). Open Scripting, then copy-paste `9g_MRIcroGL_render.py` script into the window and run with command+R. The `rbacol.clut` file must be in the `Resources\lut` folder of MRIcroGL. This will create a screenshot of the medial and lateral views of the subcortex for each model.
+   
+    *Note:* MRIcroGL will not work on Luna, therefore you must open it on your own laptop or on the remote desktop using the Remote Desktop Connection app in One View (Computer: 10.119.129.24). Before using the remote desktop, you must be given access to it first. 
 
 <p align="center">
-  <img src="subcortical-figure.png" alt="Cognitive domains" width="600"/><br/>
+  <img src="images/subcortical-figure.png" alt="Cognitive domains" width="600"/><br/>
   <em>Example of subcortical activation figure using MRIcroGL</em>
 </p>
 
 <br><br>
 
+### Frequentist statistics
+
+1. Use `9h_frequentist_multilevel.R` script to run frequentist equivalent of Bayesian multilevel models as a comparison. 
+
 ### Demographics
 
-1.	Use `10_demographic_tables_and_task_perf.R` script to analyze demographic statistics and task performance. 
+1.	Use `10_demographic_tables_and_task_perf.R` script to analyze demographic statistics and task performance.
+
+## Voxel-wise whole-brain analyses: IBMMA-toolbox
+
+A new method was developed within ENIGMA specifically for mega-analyses of multi-cohort datasets at a voxel level by Delin Sun in his [IBMMA toolbox](https://github.com/sundelinustc/IBMMA/tree/2024-10-21). It is called IBMMA (Image-Based Meta- & Mega-Analysis) precicely because it is designed to take whole-brain statistical map images and apply mass-univariate statistical models to diverse neuroimaging features, including voxel-based functional brain measures. Using IBMMA requires very little extra preparation after the above steps have been executed, and produces whole-brain voxel-wise group-level results that can be used to enrich the [parcellated whole-brain approach](#whole-brain-analyses) above.
+
+1.	Open a large interactive slurm session (I used 24 CPUs and 50GB RAM)
+2.	Download entire [IBMMA github repository](https://github.com/sundelinustc/IBMMA/tree/2024-10-21) and unzip it
+3.	Prepare `path_para.xlsx` file according to instructions in the file
+4.	Prepare covariates file  
+    a.	Must have column `fID` with following structure: sample_subject  
+  	    i.	Since our sample directory is halfpipe output for a particular contrast, this should be for ex `halfpipe_sub-916001` 
+    b.	Must have no string variables, all string variables should be converted to numerical, including `sample` 
+5)	Load modules needed
+
 
 ## Missing data
 
