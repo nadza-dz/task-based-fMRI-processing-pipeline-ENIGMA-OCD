@@ -253,18 +253,19 @@ While we control for site effects using sample as a random intercept, we also wa
 ### Visualizing results
 
 #### ROI ridge plots
-1.	Once ROI RBA has run, 9b_improve_RBA_ridge_plots_ROI.R (script) and alphabet_ridge.R (function) used to remake all figures for ROIs. Make sure to module load R/4.1.3 as all necessary packages are loaded on this version of R
-a.	9b_improve_RBA_ridge_plots_ROI.R (script) needs range of P+ values from jackknife leave-one-sample-out analyses, so before this can be run the jackknife RBAs need to be run and the 9a script below
-Jackknife raincloud plots
-2.	Once jackknife RBA has run, 9a_ROI_jackknife_raincloud_plots.R (script) and raincloud_plot.R (function) used to create raincloud plots of effects 
-a.	This script also creates a ${contrast}_${model}_P_plus_range.csv for each model and contrast that is needed for 9b script above
+
+The Bayesian RBA tool outputs it's own visualization of regional effects for each ROI as a ridge plot. We improve slightly on these ridge plots by alphabetizing the ROIs (making it easier to compare different models or contrasts side-by-side), and and modifying the color bar to make the regions in which there is evidence for differences slightly more salient, and suppress coloring regions in which there is weak or no evidence of differences.
+
+1.	Use `9b_improve_RBA_ridge_plots_ROI.R` script which calls `alphabet_ridge.R` function to remake all figures for ROI analyses. The `9b_improve_RBA_ridge_plots_ROI.R` script optionally takes a range of P+ values from the leave-one-sample-out sensitivity analyses performed above, which is created using the `9a_ROI_jackknife_raincloud_plots.R` script below. 
+
+   
+    a. Leave-one-sample-out raincloud plots  
+        Use `9a_ROI_jackknife_raincloud_plots.R` script which calls `raincloud_plot.R` function to create raincloud plots of leave-one-sample-out sensitivity analysis ROI effects.	This script also creates a `${contrast}_${model}_P_plus_range.csv` file for each model and contrast that is needed for script `9b_improve_RBA_ridge_plots_ROI.R` above.
 
 <p align="center">
   <img src="How_to_read_RBA_ridge_plots.jpg" alt="Cognitive domains" width="600"/><br/>
   <em>Example of ROI activation ridge plot</em>
 </p>
-
-<br><br>
 
 Consider a hypothetical analysis of the effects in four regions. In Regions 1 and 2 there is very strong evidence of a positive effect as the entire AUC is to the right of the no-effect line (P+=1.0), denoting a nearly 100% probability of the effect being positive in these regions. Region 1 has a larger effect size than Region 2 as the mode of the distribution is further away from the no-effect line. In Region 4 there is moderate evidence for a negative effect as AUC is largely to the left of the no-effect line (P+=0.08). Small values of P+ convey evidence that the effect is negative – a P+ value of 0.08 indicates that the probability of the effect being positive is only 8%, so the probability of it being negative is 92%. For Region 3, the distribution crosses the no-effect line with 25% of the AUC to the right of the no effect line (P+=0.25), meaning there is no strong evidence of a positive effect, but also no strong evidence of a negative effect in this region. 
 
