@@ -151,7 +151,7 @@ For the circuit-level analyses, we have expectations about where activation will
 <br><br>
 
    
-2. Use `4_make_spheres_MNI2009.sh` script to create nifti images of ROIs in MNI space based on the `ROI_MNI6_coordinates.txt` file.
+2. Use `4_make_spheres_MNI2009.sh` script to create nifti images of ROIs in MNI2009c asymmetrical space based on the `ROI_MNI6_coordinates.txt` file.
    
     a) If there are overlapping regions across spheres:
    
@@ -204,13 +204,15 @@ done
 
 <br><br>
 
-> For visualization of ROIs on a glass brain, BrainNetViewer in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
+> For visualization of ROIs on a glass brain, [BrainNetViewer](https://www.nitrc.org/projects/bnv) in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
 
 4. Use `5_extract_activation_from_ROIs.sh` script to extract activation from ROIs.
 
 ### Whole-brain analyses
 
-Two approaches are taken to whole-brain analyses here. Typically, when we speak of whole-brain analyses in fMRI we mean a voxel-wise analysis where a statistical model is fit to every voxel over the entire brain. However, I aimed to use Bayesian statistics for my analyses which involve many simultations over each unit of analysis, and doing this over every voxel in the brain would be too computationally expensive. Therefore a parcellated approach is taken, where activation is averaged over regions of the functionally-defined [Schaefer cortical atlas](https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal) (Schaefer et al., 2018). This also has the advantage that it solves another problem of our dataset. Because our analyses include a large number of participants drawn from many different samples, the brain coverage across participants can vary substantially. By averaging activation over larger cortical regions, we can retain more participants in the analysis—even if the exact voxels imaged vary slightly between them.
+Two approaches are taken to whole-brain analyses here. Typically, when we speak of whole-brain analyses in fMRI we mean a voxel-wise analysis where a statistical model is fit to every voxel over the entire brain. However, I aimed to use Bayesian statistics for my analyses which involve many simultations over each unit of analysis, and doing this over every voxel in the brain would be too computationally expensive. Therefore a parcellated approach is taken, where activation is averaged over regions of the functionally-defined [Schaefer cortical atlas](https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal) (Schaefer et al., 2018). The 200-parcel version of the 7-network Schaefer atlas is used here. The Schaefer atlas only contains cortical areas, therefore the [Melbourne subcortical atlas](https://github.com/yetianmed/subcortex) scale 2 (32 regions) is used for subcortical regions.
+
+This approach also has the advantage that it solves another problem of our dataset. Because our analyses include a large number of participants drawn from many different samples, the brain coverage across participants can vary substantially. By averaging activation over larger cortical regions, we can retain more participants in the analysis—even if the exact voxels imaged vary slightly between them.
 
 1. Use `6_extract_activation_from_Schaefer_Melbourne_parcels.sh` script to extract activation from Schaefer cortical atlas parcels and Melbourne subcortical atlas regions. 
 
@@ -220,7 +222,64 @@ For these analyses I have chosen to run a Bayesian equivalent of a multilevel mo
 
 1. Create input files for Bayesian ROI analyses. These input files consist of extracted activation from ROIs (done above) as well as demographic and clinical variables that should be in the `RBA_input_demographics_only.csv` file above. Individual input files for each model are created by the `7_create_RBA_input_models.R` script.
 
-2.
+#### ROI models
+
+For each contrast of interst, group-level models are run for the following: 
+1) Intercept model to assess task effects
+2) Case-control effect
+3) Effect of medication status
+4) Effect of age on OCD onset
+5) Effect of OCD symptom severity
+   
+1. Use `8-1b_submit_sbatch_RBA_ROI.sh` wrapper script to run these models - the script calls the RBA syntax script `8-1a_syntax_RBA_ROI.sh`. 
+
+All models include a random intercept for sample (to control for site effects like which MRI scanner was used), as well as age and sex as covariates of no interest. 
+
+#### Whole-brain models
+
+The same models are run for the whole-brain parcellations as for the ROI analyses.
+
+1. Use `8-3b_submit_sbatch_RBA_whole-brain.sh` wrapper script, which calls the RBA syntax script `8-3a_syntax_RBA_whole-brain.sh`.
+
+*Note:* The maximum length of a single job on the Luna server is 7 days (when using the `luna-cpu-long partition`). The whole-brain sbatch script is also set to 7 days as the whole-brain models with 200 Schaefer parcellations took about 5.5 days to run.
+
+#### Sensitivity analyses
+
+While we control for site effects using sample as a random intercept, we also want to run a separate sensitivity analysis for the ROI analyses by removing one sample at a time and running the same models to check whether any samples have a large effect on the results. 
+
+1. Use `8-2b_submit_sbatch_RBA_ROI_jackknife.sh` wrapper script, which calls `8-2a_syntax_RBA_ROI_jackknife.sh`, to run leave-one-sample-out analyses for each model. I did this on my main contrast of interest for each domain (or main two contrasts in the negative emotional valence domain) as the other contrasts of interest already represented a sub-group of all samples. 
+
+
+### Plotting results
+
+#### ROI ridge plots
+1.	Once ROI RBA has run, 9b_improve_RBA_ridge_plots_ROI.R (script) and alphabet_ridge.R (function) used to remake all figures for ROIs. Make sure to module load R/4.1.3 as all necessary packages are loaded on this version of R
+a.	9b_improve_RBA_ridge_plots_ROI.R (script) needs range of P+ values from jackknife leave-one-sample-out analyses, so before this can be run the jackknife RBAs need to be run and the 9a script below
+Jackknife raincloud plots
+2.	Once jackknife RBA has run, 9a_ROI_jackknife_raincloud_plots.R (script) and raincloud_plot.R (function) used to create raincloud plots of effects 
+a.	This script also creates a ${contrast}_${model}_P_plus_range.csv for each model and contrast that is needed for 9b script above
+
+<p align="center">
+  <img src="" alt="Cognitive domains" width="600"/><br/>
+  <em>Cognitive domains investigated in task fMRI analyses</em>
+</p>
+
+<br><br>
+
+#### Cortical whole-brain figures
+3.	For whole-brain RBA alphabetical figures 9c_improve_RBA_ridge_plots_whole-brain.R (script) used to remake all figures. 
+4.	For whole-brain ENIGMA toolbox images, 9d_extract_P_plus_values_SchaeferMelbourne _from_RBA_output.R script extracts P+ values from RBA analyses for input into ENIGMA toolbox and 9e_enigma-toolbox-RBA_Schaefer200.py script makes ENIGMA toolbox figures for Schaefer 200-parcel cortical atlas
+   
+#### Subcortical region figures
+
+1. Use `9f_create_3D_niftis_RBA_Melbourne32.sh` script to create a 3D nifti file of the 32 regions in the Melbourne subcortical atlas where each region has it’s corresponding P+ value.
+  
+2. To visualize subcortical activation, open [MRIcroGL](https://www.nitrc.org/projects/mricrogl). *Note:* MRIcroGL will not work on Luna, therefore you must open it on your own laptop or on Remote Desktop (10.119.129.24; you must be given access to it first). Open Scripting, then copy-paste `9g_MRIcroGL_render.py` script into the window and run with command+R. The `rbacol.clut` file must be in the `Resources\lut` folder of MRIcroGL. This will create a screenshot of the medial and lateral views of the subcortex for each model.
+
+
+### Demographics
+
+1.	Use `10_demographic_tables_and_task_perf.R` script to analyze demographic statistics and task performance. 
 
 ## Missing data
 
