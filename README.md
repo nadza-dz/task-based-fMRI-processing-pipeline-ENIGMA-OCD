@@ -125,7 +125,7 @@ Some preparation is needed before scripts can be run. Because each site used the
 
 For the circuit-level analyses, we have expectations about where activation will be found based on previous meta-analyses that were done either in healthy controls or in individuals with OCD on the task domains that we investigate here. We therefore first restrict analyses to these regions to investiggate the circuits of interest before we move to whole-brain analyses.
 
-1. Create ROI nifti images. Subcortical ROIs are created with the [Melbourne subcortical atlas](https://github.com/yetianmed/subcortex)(Tian et al., 2020) which is in the same MNI2009c asymmetrical space as HALFpipe uses. Cortical ROIs are created with 5-mm spheres around coordinates identified in literature (Thorsen et al., 2018; Nitschke et al., 2017; Norman et al., 2019). Create a `ROI_MNI6_coordinates.txt` file in which the ROI and its x, y, z coordinates are listed.
+1. Create ROI nifti images. Subcortical ROIs are created with the [Melbourne subcortical atlas](https://github.com/yetianmed/subcortex)(Tian et al., 2020) which is in the same MNI2009c asymmetrical space as HALFpipe uses. Cortical ROIs are created as 5-mm spheres around coordinates identified in literature (Thorsen et al., 2018; Nitschke et al., 2017; Norman et al., 2019). However, the coordinates from these papers were originally not in the MNI2009c asymmetrical space but rather in older MNI version 6 space, and need to be converted first. Create a `ROI_MNI6_coordinates.txt` file in which each cortical ROI and its x, y, z coordinates in MNI v. 6 space are listed.
    
 <table align="center">
   <thead>
@@ -151,7 +151,7 @@ For the circuit-level analyses, we have expectations about where activation will
 <br><br>
 
    
-2. Run `4_make_spheres_MNI2009.sh` script to create nifti images of ROIs in MNI space based on the `ROI_MNI6_coordinates.txt` file.
+2. Use `4_make_spheres_MNI2009.sh` script to create nifti images of ROIs in MNI space based on the `ROI_MNI6_coordinates.txt` file.
    
     a) If there are overlapping regions across spheres:
    
@@ -206,13 +206,25 @@ done
 
 > For visualization of ROIs on a glass brain, BrainNetViewer in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
 
-4. Create input files for [Bayesian Region-of-Interest analyses](https://afni.nimh.nih.gov/pub/dist/doc/program_help/RBA.html) (Chen et al., 2019). These input files consist of extracted activation from ROIs as well as demographic and clinical variables that should be in the `RBA_input_demographics_only.csv` file above. Activation can be extracted from ROIs using `5_extract_activation_from_ROIs.sh`. For whole-brain analyses, running a Bayesian model will not be possible in all voxels, therefore a parcellated approach is taken. Activation is averaged over regions of the functionally-defined [Schaefer cortical atlas](https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal) (Schaefer et al., 2018) using the `6_extract_activation_from_Schaefer_Melbourne_parcels.sh` script. This also includes the regions of the subcortex from the Melbourne atlas listed above. Individual input files for each model are created by the `7_create_RBA_input_models.R` script.
+4. Use `5_extract_activation_from_ROIs.sh` script to extract activation from ROIs.
 
-#### Running models
+### Whole-brain analyses
+
+Two approaches are taken to whole-brain analyses here. Typically, when we speak of whole-brain analyses in fMRI we mean a voxel-wise analysis where a statistical model is fit to every voxel over the entire brain. However, I aimed to use Bayesian statistics for my analyses which involve many simultations over each unit of analysis, and doing this over every voxel in the brain would be too computationally expensive. Therefore a parcellated approach is taken, where activation is averaged over regions of the functionally-defined [Schaefer cortical atlas](https://github.com/ThomasYeoLab/CBIG/tree/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal) (Schaefer et al., 2018). This also has the advantage that it solves another problem of our dataset. Because our analyses include a large number of participants drawn from many different samples, the brain coverage across participants can vary substantially. By averaging activation over larger cortical regions, we can retain more participants in the analysis—even if the exact voxels imaged vary slightly between them.
+
+1. Use `6_extract_activation_from_Schaefer_Melbourne_parcels.sh` script to extract activation from Schaefer cortical atlas parcels and Melbourne subcortical atlas regions. 
+
+### Running models
+
+For these analyses I have chosen to run a Bayesian equivalent of a multilevel model to investigate activation differences in cases and control using the [Bayesian Region-Based Analysis (RBA) toolbox](https://afni.nimh.nih.gov/pub/dist/doc/program_help/RBA.html) (Chen et al., 2019). Bayesian statistics offers several advantages over classical frequentist methods, some of which are particularly relevant for neuroimaging data like ours.First, unlike frequentist inference, which quantifies the probability of observing the data given a null hypothesis, Bayesian multilevel analysis allows us to estimate the probability of a hypothesis given the observed data. This means we can incorporate prior knowledge (even if limited) and combine it with the observed brain activations to compute the posterior probability that activations differ between individuals with OCD and healthy controls. This approach enables us to directly assess the credibility of our hypotheses. Second, rather than applying separate general linear models to each ROI, RBA jointly models all ROIs within a single hierarchical model. This approach accounts for the non-independence of brain regions within individuals, recognizing that activation patterns across regions in the same brain are more similar than those across different individuals. Third, because the multilevel model captures the inherent dependencies among brain regions within an individual, and individuals within a sample, it addresses the multiple comparisons problem directly. There is no inflation of familywise error rates, and therefore no need for post hoc correction for multiple testing. Finally, by using Bayesian statistics we promote full and transparent reporting of the results and eliminate pass/fail dichotomization based on (arbitrary) p-values. A full guide to understanding, running, and interpreting these RBA analyses, written by Aniek Broekhuizen and myself, can be found [here](https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSoqfKZvyctM/edit?usp=sharing&ouid=117298130236953584298&rtpof=true&sd=true).
+
+1. Create input files for Bayesian ROI analyses. These input files consist of extracted activation from ROIs (done above) as well as demographic and clinical variables that should be in the `RBA_input_demographics_only.csv` file above. Individual input files for each model are created by the `7_create_RBA_input_models.R` script.
+
+2.
 
 ## Missing data
 
-To help identify missing data the scripts output files that help identify the reasons for which participants were excluded from analyses, or which data is missing. There are three types of excluded participants:
+To help identify missing data the scripts output files that help identify the reasons for which participants were excluded from analyses, or which data is missing. There are four types of excluded participants/data:
 1. Participants excluded due to failing quality control checks - visible in `failed_QC.txt`
 2. Participants excluded due to too much motion (framewise displacement >1.0) - visible in `failed_FD1.0.txt` 
 3. Participants for who a portion of the first-level processing pipeline failed to run, for example the ICA-AROMA confound removal - visible in `failed_ICA.txt`
