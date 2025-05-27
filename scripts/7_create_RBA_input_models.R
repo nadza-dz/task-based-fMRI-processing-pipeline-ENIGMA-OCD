@@ -11,9 +11,6 @@
 ### It also creates separate output for the pediatric/adult samples as this was one of sensitivity 
 ### analyses in inhibitory domain
 
-### IMPORTANT: Adjust the child samples in the AO analyses below (IN 2 PLACES!!) to remove those samples 
-### (necessary in emotional/executive, but no longer needed in inhibitory domain)
-
 library(dplyr)
 library(tidyr)
 
