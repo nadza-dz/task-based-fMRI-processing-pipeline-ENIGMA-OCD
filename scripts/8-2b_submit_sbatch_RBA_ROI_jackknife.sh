@@ -15,8 +15,7 @@ for contrast in INHIBITION; do
     
         mkdir -p ${contrastdir}/leave_one_site_out/${model}
 
-        #for group in ADULT PED; do
-        for group in ADULT; do
+        for group in ADULT PED; do
 
             mkdir -p ${contrastdir}/leave_one_site_out/${model}/${group}
             input=${contrastdir}/RBA_input_${contrast}_ROI_${model}_${group}.txt
