@@ -274,7 +274,7 @@ This approach also has the advantage that it solves another problem of our datas
 
 1. Use `6_extract_activation_from_Schaefer_Melbourne_parcels.sh` script to extract activation from Schaefer cortical atlas parcels and Melbourne subcortical atlas regions.
 
-The second approach to whole-brain analyses does use a voxel-wise method, and is explained [here](Voxel-wise whole-brain analyses: IBMMA-toolbox.md#Voxel-wise-whole-brain-analyses-IBMMA-toolbox).
+The second approach to whole-brain analyses does use a voxel-wise method, and is explained [here](Voxel-wise_whole-brain_analyses_IBMMA-toolbox.md)
 
 ### Running models
 
@@ -301,7 +301,7 @@ The same models are run for the whole-brain parcellations as for the ROI analyse
 
 1. Use `8-3b_submit_sbatch_RBA_whole-brain.sh` wrapper script, which calls the RBA syntax script `8-3a_syntax_RBA_whole-brain.sh`.
 
-*Note:* The maximum length of a single job on the Luna server is 7 days (when using the `luna-cpu-long` partition) - the whole-brain sbatch script is therefore also set to 7 days as the whole-brain models with 200 Schaefer parcellations took about 5.5 days to run.
+> *Note:* The maximum length of a single job on the Luna server is 7 days (when using the `luna-cpu-long` partition) - the whole-brain sbatch script is therefore also set to 7 days as the whole-brain models with 200 Schaefer parcellations took about 5.5 days to run.
 
 #### Sensitivity analyses
 
@@ -410,7 +410,7 @@ All these files will be written to the `/merged` directory's contrast-of-interes
     
 ## Publications using this pipeline
 
-Dzinalija, N., Vriend, C., ENIGMA-OCD Consortium, … , Veer, I., van den Heuvel, O. A. (2024). Negative valence in Obsessive-Compulsive Disorder: A worldwide mega-analysis of task-based functional neuroimaging data of the ENIGMA-OCD consortium. Biological psychiatry, S0006-3223(24)01819-5. 
+Dzinalija, N., Vriend, C., ENIGMA-OCD Consortium, … , Veer, I., van den Heuvel, O. A. (2024). Negative valence in Obsessive-Compulsive Disorder: A worldwide mega-analysis of task-based functional neuroimaging data of the ENIGMA-OCD consortium. Biological psychiatry, S0006-3223(24)01819-5. https://doi.org/10.1016/j.biopsych.2024.12.011
 
 Dzinalija, N., Veer, I., ENIGMA-OCD Consortium, … , van den Heuvel, O. A., Vriend, C. (2025). Executive control in Obsessive-Compulsive Disorder: A worldwide mega-analysis of task-based functional neuroimaging data of the ENIGMA-OCD consortium. https://osf.io/ebtpk
 
