@@ -5,11 +5,9 @@
 ### for each contrast and model using this script. 
 
 scriptdir=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/scripts/tb_mega_pipeline/
-#for contrast in INHIBITION ERROR; do
-for contrast in INHIBITION; do 
+for contrast in INHIBITION ERROR; do
 
-#    for group in ADULT PED SST; do
-for group in ADULT; do 
+for group in ADULT PED SST; do
 
         for model in BASE YBOCS AO MED; do
 
