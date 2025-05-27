@@ -1,6 +1,6 @@
 ### Nadza Dzinalija Sept 2023
 ### Produces raincloud plot with P+ values from jackknife leave-one-site-out analyses
-### Designed for use with ROI_jackknife_raincloud_plots.R script
+### Designed for use with 9a_ROI_jackknife_raincloud_plots.R script
 
 
 raincloud_plot <-function (dat, label, wi, hi) 
