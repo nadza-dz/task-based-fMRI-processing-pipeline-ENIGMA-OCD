@@ -1,9 +1,6 @@
 #!/bin/bash
 # N.Dzinalija VUmc 2022
 
-# CV - 28-6-23: added some extra checks but in all no notes.
-
-
 # In order to harmonize processing across sites when merging the derivatives/halpipe folder
 # we assign a site code and rename all subject folders and subject output files by appending code.
 
