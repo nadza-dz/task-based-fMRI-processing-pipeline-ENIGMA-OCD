@@ -9,11 +9,8 @@
 ### 4) Create RBA input file with all demographic data, filtering out ROIs with insufficient signal 
 ###    (<30%) and subjects with too much motion.
 
-# CV - 28-06-2023 made some small modifications and added a 'clear variables part' to ensure that if one iteration of the loop fails the
-# output of the previous run doesn't get written to output of the wrong subject
 
-
-module load fsl
+module load fsl/6.0.7.6
 
 mergedir=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/merged
 demographic_file=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/covariates/RBA_input_demographics_only.csv
