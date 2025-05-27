@@ -27,7 +27,7 @@ All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed u
 
 ## Analyses
 
-The analyses were intended for the three cognitive domains of the task-based analyses in ENIGMA-OCD: emotional (negative) valence, inhibitory control, and executive function. Available task data across the ENIGMA-OCD consortium was categorized into one of these three domains, each of which is subserved by a partly distinct cogntivive circuit (fronto-limbic, ventral cognitive, and dorsal cognitive). The scripts available here were designed to be compatible with the Amsterdam University Medical Center's Luna server cluster. On the Luna server, all scripts can be found in `/data/anw/anw-work/NP/projects/data_ENIGMA-OCD/ENIGMA-TASK/scripts/tb-mega-pipeline`. 
+The analyses were intended for the three cognitive domains of the task-based analyses in ENIGMA-OCD: emotional (negative) valence, inhibitory control, and executive function. Available task data across the ENIGMA-OCD consortium was categorized into one of these three domains, each of which is subserved by a partly distinct cogntivive circuit (fronto-limbic, ventral cognitive, and dorsal cognitive). The scripts available here were designed to be compatible with the Amsterdam University Medical Center's Luna server cluster. 
 
 <p align="center">
   <img src="images/tb-fMRI-domains.png" alt="Cognitive domains" width="600"/><br/>
@@ -152,11 +152,11 @@ Some preparation is needed before scripts can be run. Because each site used the
 <br>
 
 
-6.	Use `1_convert_site_files_to_codes.sh` script to create a cleaned and compiled version of all HALFpipe output. This will create a new `/merged` directory containing compiled files for each contrast of interest. These files aggregate all the data needed for group-level analyses, per participant. Additionally, the script assigns new participant IDs based on the files created above, and renames all files to ensure consistent naming and directory structure.
+6.	Use [`1_convert_site_files_to_codes.sh`](scripts/1_convert_site_files_to_codes.sh) script to create a cleaned and compiled version of all HALFpipe output. This will create a new `/merged` directory containing compiled files for each contrast of interest. These files aggregate all the data needed for group-level analyses, per participant. Additionally, the script assigns new participant IDs based on the files created above, and renames all files to ensure consistent naming and directory structure.
 
-7.	Use `2_exclude_failed_QC_subs.sh` script to exclude participants who failed QC based on `failed_QC.txt`
+7.	Use [`2_exclude_failed_QC_subs.sh`](scripts/2_exclude_failed_QC_subs.sh) script to exclude participants who failed QC based on `failed_QC.txt`
    
-8.	Use `3_fsl_glm_to_aggregate_sessions_runs.sh` script to aggregate contrast maps across runs or sessions at the participant-level for samples that employed a task design with multiple runs or sessions. This step ensures that each participant contributes only one observation to the group-level analyses by averaging across all available runs or sessions with a simple intercept model.
+8.	Use [`3_fsl_glm_to_aggregate_sessions_runs.sh`](scripts/3_fsl_glm_to_aggregate_sessions_runs.sh) script to aggregate contrast maps across runs or sessions at the participant-level for samples that employed a task design with multiple runs or sessions. This step ensures that each participant contributes only one observation to the group-level analyses by averaging across all available runs or sessions with a simple intercept model.
    
 <br>
 
@@ -190,7 +190,7 @@ For the circuit-level analyses, we have expectations about where activation will
 <p align="center"><em>ROI_MNI6_coordinates.txt</em></p>
 <br>
    
-2. Use `4_make_spheres_MNI2009.sh` script to create nifti images of ROIs in MNI2009c asymmetrical space based on the `ROI_MNI6_coordinates.txt` file.
+2. Use [`4_make_spheres_MNI2009.sh`](scripts/4_make_spheres_MNI2009.sh) script to create nifti images of ROIs in MNI2009c asymmetrical space based on the `ROI_MNI6_coordinates.txt` file.
    
     a) If there are overlapping regions across spheres close to midline of brain:
    
@@ -264,7 +264,7 @@ For the circuit-level analyses, we have expectations about where activation will
 
 > For visualization of ROIs on a glass brain, [BrainNetViewer](https://www.nitrc.org/projects/bnv) in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
 
-4. Use `5_extract_activation_from_ROIs.sh` script to extract activation from ROIs.
+4. Use [`5_extract_activation_from_ROIs.sh`](script/5_extract_activation_from_ROIs.sh) script to extract activation from ROIs.
 
 ### Whole-brain analyses
 
@@ -272,7 +272,7 @@ Two approaches are taken to whole-brain analyses here. Typically, when we speak 
 
 This approach also has the advantage that it solves another problem of our dataset. Because our analyses include a large number of participants drawn from many different samples, the brain coverage across participants can vary substantially. By averaging activation over larger cortical regions, we can retain more participants in the analysis—even if the exact voxels imaged vary slightly between them.
 
-1. Use `6_extract_activation_from_Schaefer_Melbourne_parcels.sh` script to extract activation from Schaefer cortical atlas parcels and Melbourne subcortical atlas regions.
+1. Use [`6_extract_activation_from_Schaefer_Melbourne_parcels.sh`](scripts/6_extract_activation_from_Schaefer_Melbourne_parcels.sh) script to extract activation from Schaefer cortical atlas parcels and Melbourne subcortical atlas regions.
 
 The second approach to whole-brain analyses does use a voxel-wise method, and is explained [here](Voxel-wise_whole-brain_analyses_IBMMA-toolbox.md)
 
@@ -280,7 +280,7 @@ The second approach to whole-brain analyses does use a voxel-wise method, and is
 
 For these analyses I have chosen to run a Bayesian equivalent of a multilevel model to investigate activation differences in cases and control using the [Bayesian Region-Based Analysis (RBA) toolbox](https://afni.nimh.nih.gov/pub/dist/doc/program_help/RBA.html) (Chen et al., 2019). Bayesian statistics offers several advantages over classical frequentist methods, some of which are particularly relevant for neuroimaging data like ours.First, unlike frequentist inference, which quantifies the probability of observing the data given a null hypothesis, Bayesian multilevel analysis allows us to estimate the probability of a hypothesis given the observed data. This means we can incorporate prior knowledge (even if limited) and combine it with the observed brain activations to compute the posterior probability that activations differ between individuals with OCD and healthy controls. This approach enables us to directly assess the credibility of our hypotheses. Second, rather than applying separate general linear models to each ROI, RBA jointly models all ROIs within a single hierarchical model. This approach accounts for the non-independence of brain regions within individuals, recognizing that activation patterns across regions in the same brain are more similar than those across different individuals. Third, because the multilevel model captures the inherent dependencies among brain regions within an individual, and individuals within a sample, it addresses the multiple comparisons problem directly. There is no inflation of familywise error rates, and therefore no need for post hoc correction for multiple testing. Finally, by using Bayesian statistics we promote full and transparent reporting of the results and eliminate pass/fail dichotomization based on (arbitrary) p-values. A full guide to understanding, running, and interpreting these RBA analyses, written by Aniek Broekhuizen and myself, can be found [here](https://docs.google.com/document/d/1kQ0o0olXsk6lbkQMNW7pcSoqfKZvyctM/edit?usp=sharing&ouid=117298130236953584298&rtpof=true&sd=true).
 
-1. Create input files for Bayesian ROI analyses. These input files consist of extracted activation from ROIs (done above) as well as demographic and clinical variables that should be in the `RBA_input_demographics_only.csv` file above. Individual input files for each model are created by the `7_create_RBA_input_models.R` script.
+1. Use [`7_create_RBA_input_models.R`](scripts/7_create_RBA_input_models.R) script to create input files for Bayesian ROI analyses. These input files consist of extracted activation from ROIs (done above) as well as demographic and clinical variables that should be in the `RBA_input_demographics_only.csv` file above. Individual input files for each model are created.
 
 #### ROI models
 
@@ -291,7 +291,7 @@ For each contrast of interst, group-level models are run for the following:
 4) Effect of age on OCD onset
 5) Effect of OCD symptom severity
    
-1. Use `8-1b_submit_sbatch_RBA_ROI.sh` wrapper script to run these models - the script calls the RBA syntax script `8-1a_syntax_RBA_ROI.sh`. 
+1. Use [`8-1b_submit_sbatch_RBA_ROI.sh`](scripts/8-1b_submit_sbatch_RBA_ROI.sh) wrapper script to run these models - the script calls the RBA syntax script [`8-1a_syntax_RBA_ROI.sh`](scripts/8-1a_syntax_RBA_ROI.sh). 
 
 All models include a random intercept for sample (to control for site effects like which MRI scanner was used), as well as age and sex as covariates of no interest. 
 
@@ -299,7 +299,7 @@ All models include a random intercept for sample (to control for site effects li
 
 The same models are run for the whole-brain parcellations as for the ROI analyses.
 
-1. Use `8-3b_submit_sbatch_RBA_whole-brain.sh` wrapper script, which calls the RBA syntax script `8-3a_syntax_RBA_whole-brain.sh`.
+1. Use [`8-3b_submit_sbatch_RBA_whole-brain.sh`](scripts/8-3b_submit_sbatch_RBA_whole-brain.sh) wrapper script, which calls the RBA syntax script [`8-3a_syntax_RBA_whole-brain.sh`](scripts/8-3a_syntax_RBA_whole-brain.sh).
 
 > *Note:* The maximum length of a single job on the Luna server is 7 days (when using the `luna-cpu-long` partition) - the whole-brain sbatch script is therefore also set to 7 days as the whole-brain models with 200 Schaefer parcellations took about 5.5 days to run.
 
@@ -307,7 +307,7 @@ The same models are run for the whole-brain parcellations as for the ROI analyse
 
 While we control for site effects using sample as a random intercept, we also want to run a separate sensitivity analysis for the ROI analyses by removing one sample at a time and running the same models to check whether any samples have a large effect on the results. 
 
-1. Use `8-2b_submit_sbatch_RBA_ROI_jackknife.sh` wrapper script, which calls `8-2a_syntax_RBA_ROI_jackknife.sh`, to run leave-one-sample-out analyses for each model. I did this on the main contrast of interest for each domain (or main two contrasts in the negative emotional valence domain) as the other contrasts of interest already represented a sub-group of all samples. 
+1. Use [`8-2b_submit_sbatch_RBA_ROI_jackknife.sh`](scripts/8-2b_submit_sbatch_RBA_ROI_jackknife.sh) wrapper script, which calls [`8-2a_syntax_RBA_ROI_jackknife.sh`](scripts/8-2a_syntax_RBA_ROI_jackknife.sh), to run leave-one-sample-out analyses for each model. I did this on the main contrast of interest for each domain (or main two contrasts in the negative emotional valence domain) as the other contrasts of interest already represented a sub-group of all samples. 
 
 
 ### Visualizing results
@@ -316,7 +316,7 @@ While we control for site effects using sample as a random intercept, we also wa
 
 The Bayesian RBA tool outputs it's own visualization of regional effects for each ROI as a ridge plot. We improve slightly on these ridge plots by alphabetizing the ROIs (making it easier to compare different models or contrasts side-by-side), and and modifying the color bar to make the regions in which there is evidence for differences slightly more salient, and suppress coloring regions in which there is weak or no evidence of differences.
 
-1.	Use `9b_improve_RBA_ridge_plots_ROI.R` script which calls `alphabet_ridge.R` function to remake all figures for ROI analyses. The `9b_improve_RBA_ridge_plots_ROI.R` script optionally takes a range of P+ values from the leave-one-sample-out sensitivity analyses performed above, which is created using the `9a_ROI_jackknife_raincloud_plots.R` script below. 
+1.	Use [`9b_improve_RBA_ridge_plots_ROI.R`](scripts/9b_improve_RBA_ridge_plots_ROI.R) script which calls [`alphabet_ridge.R`](scripts/alphabet_ridge.R) function to remake all figures for ROI analyses. The [`9b_improve_RBA_ridge_plots_ROI.R`](scripts/9b_improve_RBA_ridge_plots_ROI.R) script optionally takes a range of P+ values from the leave-one-sample-out sensitivity analyses performed above, which is created using the [`9a_ROI_jackknife_raincloud_plots.R`](scripts/9a_ROI_jackknife_raincloud_plots.R) script below. 
 
 <p align="center">
   <img src="images/how_to_read_RBA_ridge_plots.jpg" alt="Cognitive domains" width="600"/><br/>
@@ -327,7 +327,7 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
 
 #### Leave-one-sample-out raincloud plots  
 
-1. Use `9a_ROI_jackknife_raincloud_plots.R` script which calls `raincloud_plot.R` function to create raincloud plots of leave-one-sample-out sensitivity analysis for ROI effects. The raincloud plots visualize how the P+ value changes for each ROI as one sample at a time is removed from analysis. This script also creates a P+ range file for each model and contrast in the format `{contrast}_{model}_P_plus_range.csv` that is needed for script `9b_improve_RBA_ridge_plots_ROI.R` above.
+1. Use [`9a_ROI_jackknife_raincloud_plots.R`](scripts/9a_ROI_jackknife_raincloud_plots.R) script which calls [`raincloud_plot.R`](scripts/raincloud_plot.R) function to create raincloud plots of leave-one-sample-out sensitivity analysis for ROI effects. The raincloud plots visualize how the P+ value changes for each ROI as one sample at a time is removed from analysis. This script also creates a P+ range file for each model and contrast in the format `{contrast}_{model}_P_plus_range.csv` that is needed for script [`9b_improve_RBA_ridge_plots_ROI.R`](scripts/9b_improve_RBA_ridge_plots_ROI.R) above.
 
 <p align="center">
   <img src="images/raincloud-figure.jpg" alt="Cognitive domains" width="800"/><br/>
@@ -362,11 +362,11 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
 
 #### Cortical whole-brain figures
 
-1.	Use `9c_improve_RBA_ridge_plots_whole-brain.R` script to make Bayesian RBA ridge plots in alphabetical order.
+1.	Use [`9c_improve_RBA_ridge_plots_whole-brain.R`](scripts/9c_improve_RBA_ridge_plots_whole-brain.R) script to make Bayesian RBA ridge plots in alphabetical order.
    
-2.	Use `9d_extract_P_plus_values_SchaeferMelbourne_from_RBA_output.R`script to extract P+ values from RBA analyses for each parcellated cortical brain region. 
+2.	Use [`9d_extract_P_plus_values_SchaeferMelbourne_from_RBA_output.R`](scripts/9d_extract_P_plus_values_SchaeferMelbourne_from_RBA_output.R) script to extract P+ values from RBA analyses for each parcellated cortical brain region. 
 
-3.	To visualize cortical activation using [ENIGMA toolbox](https://enigma-toolbox.readthedocs.io/en/latest/index.html), use `9e_enigma-toolbox-RBA_Schaefer200.py` script. The ENIGMA toolbox maps the parcellated activation's P+ values to a flattened surface space.  
+3.	To visualize cortical activation using [ENIGMA toolbox](https://enigma-toolbox.readthedocs.io/en/latest/index.html), use [`9e_enigma-toolbox-RBA_Schaefer200.py`](scripts/9e_enigma-toolbox-RBA_Schaefer200.py) script. The ENIGMA toolbox maps the parcellated activation's P+ values to a flattened surface space.  
 
 <p align="center">
   <img src="images/cortical-figure.jpg" alt="Cognitive domains" width="800"/><br/>
@@ -377,9 +377,9 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
    
 #### Subcortical region figures
 
-1. Use `9f_create_3D_niftis_RBA_Melbourne32.sh` script to create a 3D nifti file of the 32 regions in the Melbourne subcortical atlas where each region has it’s corresponding P+ value.
+1. Use [`9f_create_3D_niftis_RBA_Melbourne32.sh`](scripts/9f_create_3D_niftis_RBA_Melbourne32.sh) script to create a 3D nifti file of the 32 regions in the Melbourne subcortical atlas where each region has it’s corresponding P+ value.
   
-2. To visualize subcortical activation, open [MRIcroGL](https://www.nitrc.org/projects/mricrogl). Open Scripting, then copy-paste `9g_MRIcroGL_render.py` script into the window and run with command+R. The `rbacol.clut` file must be in the `Resources\lut` folder of MRIcroGL. This will create a screenshot of the medial and lateral views of the subcortex for each model.
+2. To visualize subcortical activation, open [MRIcroGL](https://www.nitrc.org/projects/mricrogl). Open Scripting, then copy-paste [`9g_MRIcroGL_render.py`](scripts/9g_MRIcroGL_render.py) script into the window and run with command+R. The [`rbacol.clut`]/(scripts/rbacol.clut) file must be in the `Resources\lut` folder of MRIcroGL. This will create a screenshot of the medial and lateral views of the subcortex for each model.
    
     *Note:* MRIcroGL will not work on Luna, therefore you must open it on your own laptop or on the remote desktop using the Remote Desktop Connection app in One View (Computer: 10.119.129.24). Before using the remote desktop, you must be given access to it first. 
 
@@ -392,11 +392,11 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
 
 ### Frequentist statistics
 
-1. Use `9h_frequentist_multilevel.R` script to run frequentist equivalent of Bayesian multilevel models as a comparison. 
+1. Use [`9h_frequentist_multilevel.R`](scripts/9h_frequentist_multilevel.R) script to run frequentist equivalent of Bayesian multilevel models as a comparison. 
 
 ### Demographics
 
-1.	Use `10_demographic_tables_and_task_perf.R` script to analyze demographic statistics and task performance.
+1.	Use [`10_demographic_tables_and_task_perf.R`](scripts/10_demographic_tables_and_task_perf.R) script to analyze demographic statistics and task performance.
 
 ## Missing data
 
