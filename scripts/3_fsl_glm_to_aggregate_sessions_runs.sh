@@ -10,15 +10,12 @@
 # subject for this contrast of interest. Runs that failed QC have already been excluded in the 
 # 2_exclude_failed_QC_subs.sh script so all that remain in the contrast folders may be used 
 
-# CV 28-6-23 added some extra output and some notes but overall looks good
-
 
 ### Paths ####
 
 INHIBITION=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/merged/INHIBITION/halfpipe
 ERROR=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/merged/ERROR/halfpipe
 
-# would make the fsl version more explicit. Although unlikely it is possible that newer versions of fsl will behave differently.
 module load fsl/6.0.7.6
 
 # Find all subjects that have multiple runs/sessions, then concatenate all effect maps for those subjects.
