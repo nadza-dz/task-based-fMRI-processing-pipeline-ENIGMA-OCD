@@ -13,7 +13,7 @@
 #SBATCH --time=01-0:00:00
 
 
-module load fsl
+module load fsl/6.0.7.6
 
 mergedir=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/merged
 demographic_file=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/covariates/RBA_input_demographics_only.csv
