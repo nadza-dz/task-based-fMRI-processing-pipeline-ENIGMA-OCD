@@ -34,7 +34,7 @@ The analyses were intended for the three cognitive domains of the task-based ana
   <em>Cognitive domains investigated in task fMRI analyses</em>
 </p>
 
-<br><br>
+<br>
 
 In the figure below the processing pipeline is depicted for one of the domains - negative emotional valence. Using the manuals linked above, the steps of `Harmonzied processing` and `First-level contrast` extraction have already taken place. This manual will explain how to use the available scripts to execute `Mega-analysis`, investigating both case-control effects and the effects of clinical characteristics of OCD, such as the age of OCD onset, medication status, and symptom severity. Region of interest (ROI) analyses in the relevant neural circuit for each domain are conducted at the group-level, as well as whole-brain analyses via two separate approaches (not pictured). We refer to these analyses as mega-analyses because we use individual-participant data when combining datasets of multiple samples, which is a different than the approach meta-analyses typically take. Meta-analyses usually rely on summary statistics at the sample level, aggregating data across samples, but not across individual participants. A huge advantage of our mega-analytic approach is that we are able to investigate the effects of participant-level variables, such as medication status or symptom severity, on brain activity in a way that meta-analyses cannot.
 
@@ -63,32 +63,69 @@ Some preparation is needed before scripts can be run. Because each site used the
     <tr><td>sub-MRI201905291BART005</td><td>sub-550005</td></tr>
     <tr><td>sub-MRI201906031BART006</td><td>sub-550006</td></tr>
     <tr><td>sub-MRI201906051BART007</td><td>sub-550007</td></tr>
+    <tr>
+      <td colspan="2" align="center">...</td>
+    </tr>
   </tbody>
 </table>
 <p align="center"><em>Dictionary_SUB_ID.csv</em></p>
 
-<br><br>
+<br>
 
 2. Compile a covariate file `RBA_input_demographics_only.csv` of all relevant clinical and demographic data per subject. In these analyes this includes, in order of columns: 1) Subject ID, 2) Sample ID, 3) Task name, 4) Diagnosis (OCD/HC), 5) Sex, 6) Age, 7) Y-BOCS symptom severity score, 8) Medication status, and 9) Age of OCD onset.
    
-| Subj       | Sample   | Task   | Diagnosis  | Sex | Age | Y-BOCS | Medication Status | Age of Onset    |
-|------------|----------|--------|-----|-----|-----|-------|-----|-------|
-| sub-550002 | BRAGA_ER |  Symtpom provocation task | OCD | m   | 21  | 19    | Med | Child |
-| sub-550003 | BRAGA_ER |  Symtpom provocation task | OCD | m   | 18  | 28    | Med | Child |
-| sub-550005 | BRAGA_ER |  Symtpom provocation task | OCD | f   | 55  | 28    | Med | Adult |
+<table align="center">
+  <thead>
+    <tr>
+      <th>Subj</th>
+      <th>Sample</th>
+      <th>Task</th>
+      <th>Diagnosis</th>
+      <th>Sex</th>
+      <th>Age</th>
+      <th>Y-BOCS</th>
+      <th>Medication Status</th>
+      <th>Age of Onset</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>sub-550002</td><td>BRAGA_ER</td><td>Symtpom provocation task</td><td>OCD</td><td>m</td><td>21</td><td>19</td><td>Med</td><td>Child</td></tr>
+    <tr><td>sub-550003</td><td>BRAGA_ER</td><td>Symtpom provocation task</td><td>OCD</td><td>m</td><td>18</td><td>28</td><td>Med</td><td>Child</td></tr>
+    <tr><td>sub-550005</td><td>BRAGA_ER</td><td>Symtpom provocation task</td><td>OCD</td><td>f</td><td>55</td><td>28</td><td>Med</td><td>Adult</td></tr>
+    <tr><td colspan="9" align="center"><em>...</em></td></tr>
+  </tbody>
+</table>
 <p align="center"><em>RBA_input_demographics_only.csv</em></p>
 
-<br><br>
+<br>
 
 3.	By checking each site's HALFpipe `/derivatives/halfpipe` folder, make a mega-analytic dictionary that inventories the labels that were used at that site for first-level features including: 1) sample, 2) site, 3) site code (the one you assigned in step #2 above), 3) task, 4) the various contrasts created at the first level, and 5) the various confound-removal strategies used in the first-level analyses (in our case: 1) ICA-AROMA, 2) motion-correction with 6 rigid-body motion parameters, and 3) no correction). Save as `Mega_analysis_dictionary.csv`.
    
-| Sample              | Site           | Code | Task | Contrast1_EMOgtNEUT | Contrast2_OCDgtNEUT | Contrast3_FEARgtNEUT | Contrast4__OCDgtFEAR | ICAAROMA | MOTIONCORR | NOCORR |
-|:--------------------|:---------------|:-----|:-----|:-------------------|:-------------------|:--------------------|:-------------|:---------|:-----------|:-------|
-| VUmc_ARRIBA_TIPICCO | van_den_Heuvel | 822  | SPT  | OCDFEARGtSCRAMBLED | OCDGtSCRAMBLED     | FEARGtSCRAMBLED     | OCDGtFEAR   | ICAAROMA | MOTIONCORR | NOCORR |
-| VUmc_VENI           | van_den_Heuvel | 916  | ERT  | OCDFEARGtNEUT      | OCDGtNEUT          | FEARGtNEUT          | OCDGtFEAR   | ICAAROMA | MOTIONCORR | NOCORR |
+<table align="center">
+  <thead>
+    <tr>
+      <th>Sample</th>
+      <th>Site</th>
+      <th>Code</th>
+      <th>Task</th>
+      <th>Contrast1_EMOgtNEUT</th>
+      <th>Contrast2_OCDgtNEUT</th>
+      <th>Contrast3_FEARgtNEUT</th>
+      <th>Contrast4__OCDgtFEAR</th>
+      <th>ICAAROMA</th>
+      <th>MOTIONCORR</th>
+      <th>NOCORR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>VUmc_ARRIBA_TIPICCO</td><td>van_den_Heuvel</td><td>822</td><td>SPT</td><td>OCDFEARGtSCRAMBLED</td><td>OCDGtSCRAMBLED</td><td>FEARGtSCRAMBLED</td><td>OCDGtFEAR</td><td>ICAAROMA</td><td>MOTIONCORR</td><td>NOCORR</td></tr>
+    <tr><td>VUmc_VENI</td><td>van_den_Heuvel</td><td>916</td><td>ERT</td><td>OCDFEARGtNEUT</td><td>OCDGtNEUT</td><td>FEARGtNEUT</td><td>OCDGtFEAR</td><td>ICAAROMA</td><td>MOTIONCORR</td><td>NOCORR</td></tr>
+    <tr><td colspan="11" align="center"><em>...</em></td></tr>
+  </tbody>
+</table>
 <p align="center"><em>Mega_analysis_dictionary.csv</em></p>
 
-<br><br>
+<br>
 
 4.	Organize HALFpipe outputs by creating one main directory containing a folder for each site. Inside each site folder, create one directory per sample and place the sample's HALFpipe folder into it.
 
@@ -105,11 +142,14 @@ Some preparation is needed before scripts can be run. Because each site used the
     <tr><td>sub-822011</td><td></td></tr>
     <tr><td>sub-916079</td><td>2</td></tr>
     <tr><td>sub-916081</td><td>1</td></tr>
+    <tr>
+      <td colspan="2" align="center">...</td>
+    </tr>
   </tbody>
 </table>
 <p align="center"><em>failed_QC.txt</em></p>
 
-<br><br>
+<br>
 
 
 6.	Use `1_convert_site_files_to_codes.sh` script to create a cleaned and compiled version of all HALFpipe output. This will create a new `/merged` directory containing compiled files for each contrast of interest. These files aggregate all the data needed for group-level analyses, per participant. Additionally, the script assigns new participant IDs based on the files created above, and renames all files to ensure consistent naming and directory structure.
@@ -118,7 +158,7 @@ Some preparation is needed before scripts can be run. Because each site used the
    
 8.	Use `3_fsl_glm_to_aggregate_sessions_runs.sh` script to aggregate contrast maps across runs or sessions at the participant-level for samples that employed a task design with multiple runs or sessions. This step ensures that each participant contributes only one observation to the group-level analyses by averaging across all available runs or sessions with a simple intercept model.
    
-<br><br>
+<br>
 
 
 ### Region-of-Interest analyses
@@ -148,14 +188,14 @@ For the circuit-level analyses, we have expectations about where activation will
   </tbody>
 </table>
 <p align="center"><em>ROI_MNI6_coordinates.txt</em></p>
-<br><br>
-
+<br>
    
 2. Use `4_make_spheres_MNI2009.sh` script to create nifti images of ROIs in MNI2009c asymmetrical space based on the `ROI_MNI6_coordinates.txt` file.
    
     a) If there are overlapping regions across spheres close to midline of brain:
    
     - Remove overlapping regions from lateralized spheres by multiplying spheres by corresponding hemisphere mask to get non-overlapping lateralized regions.
+     
       ```bash
       fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz -roi 0 48.5 0 -1 0 -1 0 -1 -bin leftHemisphere
       fslmaths tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz -roi 48.5 -1 0 -1 0 -1 0 -1 -bin rightHemisphere
@@ -164,11 +204,12 @@ For the circuit-level analyses, we have expectations about where activation will
       mv SMA_r_lateralized.nii.gz SMA_r.nii.gz
       mv SMA_l_lateralized.nii.gz SMA_l.nii.gz
       ```
-   > 48.5 determined by taking half of dim 1 after running `fslinfo tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz`
+       > 48.5 determined by taking half of dim 1 after running `fslinfo tpl-MNI152NLin2009cAsym_res-02_desc-brain_T1w.nii.gz`
    
     b) If there are overlapping regions across spheres close to one another:
    
     - Remove overlapping regions from spheres by obtaining mutually exclusive region of each sphere.
+      
       ```bash
       fslmaths sgACC.nii.gz -mul vmPFC.nii.gz sgACC_vmPFC_intersect.nii.gz
       fslmaths sgACC.nii.gz -sub sgACC_vmPFC_intersect.nii.gz sgACC_unique.nii.gz
@@ -176,9 +217,11 @@ For the circuit-level analyses, we have expectations about where activation will
       mv sgACC_unique.nii.gz sgACC.nii.gz
       mv vmPFC_unique.nii.gz vmPFC.nii.gz
       ```
+      
     c) If there are multiple coordinates for a single region:
 
     - Cobmine regions with multiple coordinates into single image with both regions
+      
       ```bash
       fslmaths FEF_r1.nii.gz -add FEF_r2.nii.gz FEF_r.nii.gz
       ```
@@ -186,11 +229,12 @@ For the circuit-level analyses, we have expectations about where activation will
 
 4. Extract volumes of ROIs into `ROIs_volume.txt`. This will be used later for checking that there is sufficient signal in each ROI when extracting activation in the region.
 
-```bash
-for ROI in *.nii.gz; do
-  echo "${ROI%.nii.gz}" $(fslstats ${ROI} -V >> ROIs_volume.txt
-done
-```
+    ```bash
+    for ROI in *.nii.gz; do
+      echo "${ROI%.nii.gz}" $(fslstats ${ROI} -V >> ROIs_volume.txt
+    done
+    ```
+    
 <table align="center">
   <thead>
     <tr>
@@ -216,7 +260,7 @@ done
 </table>
 <p align="center"><em>ROIs_volume.txt</em></p>
 
-<br><br>
+<br>  
 
 > For visualization of ROIs on a glass brain, [BrainNetViewer](https://www.nitrc.org/projects/bnv) in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
 
@@ -290,7 +334,7 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
   <em>Example of raincloud plot for leave-one-sample-out sensitivity analysis</em>
 </p>
 
-<br><br>      
+<br>
 
 <table align="center">
   <thead>
@@ -307,11 +351,14 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
     <tr><td>cingulate (R)</td><td>0.25</td><td>0.45</td></tr>
     <tr><td>dlPFC (L)</td><td>0.04</td><td>0.20</td></tr>
     <tr><td>dlPFC (R)</td><td>0.04</td><td>0.22</td></tr>
+    <tr>
+      <td colspan="3" align="center">...</td>
+    </tr>
   </tbody>
 </table>
 <p align="center"><em>P_plus_range.csv</em></p>
 
-<br><br>
+<br>
 
 #### Cortical whole-brain figures
 
@@ -326,7 +373,7 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
   <em>Example of cortical activation figure using ENIGMA Toolbox</em>
 </p>
 
-<br><br>   
+<br>
    
 #### Subcortical region figures
 
@@ -341,7 +388,7 @@ Consider a hypothetical analysis of the effects in four regions. In Regions 1 an
   <em>Example of subcortical activation figure using MRIcroGL</em>
 </p>
 
-<br><br>
+<br>
 
 ### Frequentist statistics
 
@@ -394,6 +441,9 @@ A new method was developed within ENIGMA specifically for mega-analyses of multi
     <tr><td>halfpipe_sub-157001</td><td>sub-157001</td><td>1</td><td>TOL</td><td>OCD</td><td>28</td><td>42</td><td>m</td><td>Adult</td><td>Unmed</td></tr>
     <tr><td>halfpipe_sub-157002</td><td>sub-157002</td><td>1</td><td>TOL</td><td>HC</td><td></td><td>39</td><td>m</td><td>HC</td><td>HC</td></tr>
     <tr><td>halfpipe_sub-157003</td><td>sub-157003</td><td>1</td><td>TOL</td><td>OCD</td><td>36</td><td>36</td><td>f</td><td>Adult</td><td>Med</td></tr>
+    <tr>
+      <td colspan="10" align="center">...</td>
+    </tr>
   </tbody>
 </table>
 <p align="center"><em>Covariate_file.txt</em></p>
@@ -401,6 +451,7 @@ A new method was developed within ENIGMA specifically for mega-analyses of multi
 <br>
 
 5.	Load modules needed:
+   
     ```bash
     Anaconda3 
     module load R/4.4.1
@@ -408,7 +459,8 @@ A new method was developed within ENIGMA specifically for mega-analyses of multi
     ```
 <br>
 
-6. Install several R packages including pTFCE package via RStudio if not already installed: 
+6. Install several R packages including pTFCE package via RStudio if not already installed:
+   
     ```bash
     install.packages('pacman', repos = "https://cran.rstudio.com")
     library(pacman)
@@ -422,12 +474,14 @@ A new method was developed within ENIGMA specifically for mega-analyses of multi
 <br>
 
 7.	Raise maximum number of simultaneously open network sockets in your terminal
+   
     ```bash
     ulimit -n 5000
     ```
 <br>
 
 8.	Adjust `R_modelling_parallel.R` script to limit number of cores to slightly below number that the slurm session has, in 2 places in the script:
+   
     ```bash
     # line 110
     cl <- makeCluster(cores)       # change to: cl <- makeCluster(20)
@@ -436,14 +490,16 @@ A new method was developed within ENIGMA specifically for mega-analyses of multi
     ```
 <br>
     
-9.	Adjust `R_modelling_parallel.R` script in the `/SDL_functions` folder to remove one variable being written: 
+9.	Adjust `R_modelling_parallel.R` script in the `/SDL_functions` folder to remove one variable being written:
+    
     ```bash
     # line 221
     foreach(i = 1:dim(term_cols)[1], .packages = packages) %dopar% {save_data <-save_data(term_cols[i,]) }   # change to: foreach(i = 1:dim(term_cols)[1], .packages = packages) %dopar% {save_data(term_cols[i, ])  }
     ```
 <br>
 
-10.	Load python environment and run `ibmma.py` script 
+10.	Load python environment and run `ibmma.py` script
+    
     ```bash
     conda activate myenv
     python ibmma.py
