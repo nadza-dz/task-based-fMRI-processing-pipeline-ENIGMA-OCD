@@ -4,7 +4,7 @@ This manual guides you through completing group-level analyses on individual par
 
 ## Preprocessing
 
-All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed using [HALFpipe](https://github.com/HALFpipe/HALFpipe) (Waller et al., 2022), an open-source containerized processing pipeline designed within the ENIGMA consortium. HALFpipe was used for pre-processing and first-level feature extraction, and was run in an identical way across all sites to ensure harmonization of data (pre)processing. The manual and acoompanying video tutorial explain how to process raw task data using HALFpipe for the ENIGMA-OCD task-based analyses.
+All raw data for the task-based fMRI analyses in ENIGMA-OCD has been processed using [HALFpipe](https://github.com/HALFpipe/HALFpipe) (Waller et al., 2022), an open-source containerized processing pipeline designed within the ENIGMA consortium. HALFpipe was used for pre-processing and first-level feature extraction, and was run in an identical way across all sites to ensure harmonization of data (pre)processing. The manual and accompanying video tutorial explain how to process raw task data using HALFpipe for the ENIGMA-OCD task-based analyses.
 
 <table align="center">
   <tr>
