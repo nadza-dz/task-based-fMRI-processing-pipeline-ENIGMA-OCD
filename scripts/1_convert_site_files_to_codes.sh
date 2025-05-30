@@ -6,25 +6,26 @@
 
 # For inhibitory processing domain the sites, samples, and unique identifier codes are:
 
-# Sample				Site					Sample_ID		Task_name       Contrast_INHIBITON_name  	Contrast_ERROR_name 			Feature_ICA_name	Feature_MOCO_name	Feature_NOCO_name
-# ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-# AMC_TBM				van_Wingen				837				SST				STOPCORRGtGOCORR			STOPERRGtSTOPCORR				ICAAROMA			MOTIONCORR			NOCORR
-# AMC_BASCULE			Huyser					212				FLANKER			inhibition					error							FLANKERICAAROMA		FLANKERMOTIONCORR	FLANKERNOCORR
-# BARCELONA				Fullana					727				stopsignal		contrast1					contrast2						ICAAROMA			MOTIONCORR			NOCORR
-# BERGEN_B4DT			Thorsen					244				SST				inhibition					error							ICAAROMA			SSTMOTIONCORR		SSTNOCORR
-# COIMBRA				Castelo-Branco			252				SST				SuccessfulStopGtCorrectGo	FailedStopGtSuccessfulStop		ICAAROMA			MOTIONCORR			NOCORR
-# COMPULS				Buitelaar				302				STOP			Inhibition					Error												MOTIONCORR			NOCORR
-# HUB_3T				Kathmann				974				FLANKER			inhibition					error							FLANKERICAAROMA		FLANKERMOTIONCORR	FLANKERNOCORR
-# IDIBELL_15T			Menchon_Soriano-Mas		656				STOP			INHIBITION					ErrorSTOP						ICAAROMA			MOTIONCORR			NOCORR
-# IDIBELL_3T			Menchon_Soriano-Mas		565				STOP			Inhibition					ErrorSTOP						ICAAROMA			MOTIONCORRSTOP		NOCORRSTOP
-# MUC_TUM				Koch					187				SST				Inhibition					F								ICAAROMASST			MOTIONCORRSST		NOCORRSST
-# NIMHANS_GONOGO		Reddy					833				GNG				Inhibition													ICAAROMA			MOTIONCORR			NOCORR
-# SEOUL_SST				Kwon					523				SST				Inhibition					Error							ICAAROMA			MOTIONCORR			NOCORR
-# SEQ_1_NKI				Stern					904				UFA				HoldBlinkGtNormalBlink										ICAAROMA			MOTIONCORR			NOCORR
-# UZH_OCD				Walitza_Brem			452				flanker			contrast3_conflict			contrast5Error					ICAAROMA			MOTIONCORR			NOCORR
-# VUmc_TIPICCO			van_den_Heuvel			822				SST				inhibition					error							SSTICAAROMA			SSTMOTIONCORR		SSTNOCORR
-# VUmc_VENI				van_den_Heuvel			916				STOP			inhibition					error							SSTICAAROMA			SSTMOTIONCORR		SSTNOCORR
-# ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Sample		Site			Sample_ID	Task_name      	Contrast_INHIBITON_name  	Contrast_ERROR_name 		Feature_ICA_name	Feature_MOCO_name	Feature_NOCO_name
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# AMC_TBM		van_Wingen		837		SST		STOPCORRGtGOCORR		STOPERRGtSTOPCORR		ICAAROMA		MOTIONCORR		NOCORR
+# AMC_BASCULE		Huyser			212		FLANKER		inhibition			error				FLANKERICAAROMA		FLANKERMOTIONCORR	FLANKERNOCORR
+# BARCELONA		Fullana			727		stopsignal	contrast1			contrast2			ICAAROMA		MOTIONCORR		NOCORR
+# BERGEN_B4DT		Thorsen			244		SST		inhibition			error				ICAAROMA		SSTMOTIONCORR		SSTNOCORR
+# COIMBRA		Castelo-Branco		252		SST		SuccessfulStopGtCorrectGo	FailedStopGtSuccessfulStop	ICAAROMA		MOTIONCORR		NOCORR
+# COMPULS		Buitelaar		302		STOP		Inhibition			Error							MOTIONCORR		NOCORR
+# HUB_3T		Kathmann		974		FLANKER		inhibition			error				FLANKERICAAROMA		FLANKERMOTIONCORR	FLANKERNOCORR
+# IDIBELL_15T		Menchon_Soriano-Mas	656		STOP		INHIBITION			ErrorSTOP			ICAAROMA		MOTIONCORR		NOCORR
+# IDIBELL_3T		Menchon_Soriano-Mas	565		STOP		Inhibition			ErrorSTOP			ICAAROMA		MOTIONCORRSTOP		NOCORRSTOP
+# MUC_TUM		Koch			187		SST		Inhibition			F				ICAAROMASST		MOTIONCORRSST		NOCORRSST
+# NIMHANS_GONOGO	Reddy			833		GNG		Inhibition							ICAAROMA		MOTIONCORR		NOCORR
+# SEOUL_SST		Kwon			523		SST		Inhibition			Error				ICAAROMA		MOTIONCORR		NOCORR
+# SEQ_1_NKI		Stern			904		UFA		HoldBlinkGtNormalBlink						ICAAROMA		MOTIONCORR		NOCORR
+# UZH_OCD		Walitza_Brem		452		flanker		contrast3_conflict		contrast5Error			ICAAROMA		MOTIONCORR		NOCORR
+# VUmc_TIPICCO		van_den_Heuvel		822		SST		inhibition			error				SSTICAAROMA		SSTMOTIONCORR		SSTNOCORR
+# VUmc_VENI		van_den_Heuvel		916		STOP		inhibition			error				SSTICAAROMA		SSTMOTIONCORR		SSTNOCORR
+# ABCD_SST		ABCD			100		SST		Inhibition			Error							MOTIONCORR		NOCORR						
+# --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 #######################################################################################################################################
 ### Paths ####
@@ -67,7 +68,8 @@ done <${MEGAdict}
 
 ### Convert each subject to new subject ID, and all files in derivatives folder
 ## Then identify contrasts of interest and move files needed for mega-analysis to their own folders
-for sample in AMC_BASCULE BARCELONA BERGEN_B4DT COIMBRA COMPULS HUB_3T IDIBELL_15T IDIBELL_3T MUC_TUM NIMHANS_GONOGO SEOUL_SST SEQ_1_NKI TBM_OCD UZH_OCD VUmc_TIPICCO VUmc_VENI; do
+readarray -t samples < <(awk -F',' 'NR>1 {print $1}' "$MEGAdict")
+for sample in "${samples[@]}"; do
 	sample_to_search=${sample}
 	echo $sample
 	values="${dictionary["$sample_to_search"]}"
