@@ -26,7 +26,6 @@ for (contrast in c("INHIBITION","ERROR")){
   
   for (model in c("AO", "BASE", "MED", "YBOCS")){
     
-    #for (group in c("ADULT", "SST", "PED", "ABCD")){
     for (group in c("ADULT", "SST", "PED")){
     
       directories <- c(paste0("/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/RBA/Whole_brain/Schaefer200/", contrast, "/", model, "/", group))
