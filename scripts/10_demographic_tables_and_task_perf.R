@@ -1,7 +1,7 @@
 ### N.Dzinalija VUmc 2023
 
 ### Creates:
-### Demographics stats and tables for executive domain analyses (per sample and total across samples)
+### Demographics stats and tables for inhibitory domain analyses (per sample and total across samples)
 ### SST performance stats and tables
 ### Demographics stats per clinical group
 
