@@ -49,7 +49,7 @@ combined_masks=combined_masks.reshape(-1)
 
 
 for atlas in  ["Schaefer200"]:
-    for contrast in ["PLANNING","LOAD"]:
+    for contrast in ["INHIBITION","ERROR"]:
         for model in ["AO","BASE","MED","YBOCS"]:
             file_path = os.path.join(base_dir,atlas,contrast,model)
             os.chdir(file_path)
