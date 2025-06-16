@@ -3,8 +3,9 @@ library(lmerTest)
 library(dplyr)
 
 # Read in the dataset
-data <- read.table("/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Executive_domain/merged/PLANNING/RBA_input_PLANNING_ROI_BASE.txt", header = TRUE, sep = "\t")
+data <- read.table("/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/merged/PLANNING/RBA_input_INHIBITION_ROI_BASE.txt", header = TRUE, sep = "\t")
 data$Sample <- as.factor(data$Sample)
+data$SEX <- as.factor(data$SEX)
 
 # Initialize an empty data frame to store results
 p_table <- data.frame(ROI = character(), T_value = numeric(), p_value = numeric(), stringsAsFactors = FALSE)
