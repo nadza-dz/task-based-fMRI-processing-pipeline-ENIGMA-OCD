@@ -2,7 +2,7 @@
 
 ### Creates:
 ### Demographics stats and tables for executive domain analyses (per sample and total across samples)
-### TOL performance stats and tables
+### SST performance stats and tables
 ### Demographics stats per clinical group
 
 library(readxl)
@@ -10,13 +10,13 @@ library(dplyr)
 library(tidyverse)
 library(knitr)
 
-# Read in RBA input file for main contrast of interest and TOL performance file
-setwd("~/my-scratch/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibit_Exec_domain/merged/PLANNING")
-df <- read.csv("RBA_input_PLANNING_ROI.txt")
-TOL=read.csv("/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibit_Exec_domain/covariates/Performance_TOL.csv") 
-TOL=TOL[,c("New.Sub.ID","Score")]
-colnames(TOL) <- c("Subj","Accuracy")
-df=merge(df,TOL,all.x=TRUE)
+# Read in RBA input file for main contrast of interest and SST performance file
+setwd("~/my-scratch/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/merged/INHIBITION")
+df <- read.csv("RBA_input_INHIBITION_ROI.txt")
+SST=read.csv("/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibit_Exec_domain/covariates/Performance_SST.csv") 
+SST=SST[,c("New.Sub.ID","Score")]
+colnames(SST) <- c("Subj","Accuracy")
+df=merge(df,SST,all.x=TRUE)
 
 # Convert long to wide format
 df <- df %>% select(-c("ROI","Y"))
@@ -208,8 +208,8 @@ for (sample in unique(covs$Sample)){
   sub_sample_ybocs_mean = round(mean(sub_sample$YBOCS[sub_sample$Dx=="OCD"], na.rm = TRUE),2)
   sub_sample_ybocs_sd = round(sd(sub_sample$YBOCS[sub_sample$Dx=="OCD"], na.rm = TRUE),2)
   
-  sub_sample_TOL_accuracy_mean = round(mean(sub_sample$Accuracy, na.rm = TRUE),2)
-  sub_sample_TOL_accuracy_sd = round(sd(sub_sample$Accuracy, na.rm = TRUE),2)
+  sub_sample_SST_accuracy_mean = round(mean(sub_sample$Accuracy, na.rm = TRUE),2)
+  sub_sample_SST_accuracy_sd = round(sd(sub_sample$Accuracy, na.rm = TRUE),2)
   
   per_site=data.frame(sample,
                       sub_sample_OCD_n,
@@ -219,7 +219,7 @@ for (sample in unique(covs$Sample)){
                       sub_sample_child_onse_perc,
                       sub_sample_med_perc,
                       paste(sub_sample_ybocs_mean,"±",sub_sample_ybocs_sd),
-                      paste(sub_sample_TOL_accuracy_mean,"±",sub_sample_TOL_accuracy_sd))
+                      paste(sub_sample_SST_accuracy_mean,"±",sub_sample_SST_accuracy_sd))
   
   all_sites=rbind(all_sites,per_site)
 }
@@ -232,18 +232,18 @@ colnames(all_sites) = c("Sample",
                         "% Child onset OCD",
                         "% Medicated OCD",
                         "(C)Y-BOCS (mean ± SD)",
-                        "TOL accuracy (mean ± SD)")
+                        "SST accuracy (mean ± SD)")
 kable(all_sites)
 sum(all_sites$`n OCD`)
 sum(all_sites$`n HC`)
 
 
-### TOL performance
+### SST performance
 
 covs = covs[!is.na(covs$Accuracy),]
 
-TOL_per_site=data.frame()
-TOL_all_sites=data.frame()
+SST_per_site=data.frame()
+SST_all_sites=data.frame()
 
 for (sample in unique(covs$Sample)){
   print(sample)
@@ -263,22 +263,22 @@ for (sample in unique(covs$Sample)){
   t_test_accuracy_dof = round(t_test_accuracy$parameter)
   t_test_accuracy_p = round(t_test_accuracy$p.value,2)
     
-  TOL_per_site=data.frame(sample,
+  SST_per_site=data.frame(sample,
                           paste(OCD_accuracy_mean,"±",OCD_accuracy_sd),
                           paste(HC_accuracy_mean,"±",HC_accuracy_sd),
                           paste("T(",t_test_accuracy_dof,") = ",t_test_accuracy_stat,", P = ",t_test_accuracy_p,sep=""))
     
   
-  TOL_all_sites=rbind(TOL_all_sites,TOL_per_site)
+  SST_all_sites=rbind(SST_all_sites,SST_per_site)
 
 }
 
-colnames(TOL_all_sites) = c("Sample",
+colnames(SST_all_sites) = c("Sample",
                         "OCD Accuracy (mean ± SD)",
                         "HC Accuracy (mean ± SD)",
                         "Statistic")
 
-kable(TOL_all_sites)
+kable(SST_all_sites)
 
 
 ### Demographics tables for executive domain per clinical group
