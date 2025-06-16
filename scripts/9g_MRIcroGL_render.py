@@ -8,9 +8,9 @@
 
 import gl
 
-contrasts = ['PLANNING', 'LOAD']
+contrasts = ['INHIBITION', 'ERROR']
 models = ['YBOCS', 'AO', 'MED', 'BASE']
-tasks = ['', 'TOL_only']
+groups = ['ADULT', 'PED', 'SST']
 sides = ['left', 'right']
 
 base_path = 'C:\\Users\\P078744\\OneDrive - Amsterdam UMC\\Documents\\ENIGMA-OCD\\Temp\\Whole_brain\\Schaefer200'
@@ -27,35 +27,30 @@ for contrast in contrasts:
             submodels = [None]  
 
         for submodel in submodels:
-            for task in tasks:
+            for group in groups:
                 for side in sides:
                     gl.resetdefaults()
-
-                    if task == "TOL_only":
-                        task_path = "\\TOL_only"
-                    else:
-                        task_path = ""
                     
                     if model == 'BASE':
-                        filename = "{base_path}\\{contrast}\\{model}{task_path}\\Subcortical\\{contrast}_{submodel}_Melbourne32_3D.nii.gz".format(
-                            base_path=base_path, contrast=contrast, model=model, task_path=task_path, submodel=submodel
+                        filename = "{base_path}\\{contrast}\\{model}\\{group}\\Subcortical\\{contrast}_{submodel}_Melbourne32_3D.nii.gz".format(
+                            base_path=base_path, contrast=contrast, model=model, group=group, submodel=submodel
                         )
-                        overlay_filename = "{base_path}\\{contrast}\\{model}{task_path}\\Subcortical\\{contrast}_{submodel}_Melbourne32_3D_{side}.nii.gz".format(
-                            base_path=base_path, contrast=contrast, model=model, task_path=task_path, submodel=submodel, side=side
+                        overlay_filename = "{base_path}\\{contrast}\\{model}\\{group}\\Subcortical\\{contrast}_{submodel}_Melbourne32_3D_{side}.nii.gz".format(
+                            base_path=base_path, contrast=contrast, model=model, group=group, submodel=submodel, side=side
                         )
                     elif model == 'YBOCS':
-                        filename = "{base_path}\\{contrast}\\{model}{task_path}\\Subcortical\\{contrast}_{model}_Melbourne32_3D.nii.gz".format(
-                            base_path=base_path, contrast=contrast, model=model, task_path=task_path
+                        filename = "{base_path}\\{contrast}\\{model}\\{group}\\Subcortical\\{contrast}_{model}_Melbourne32_3D.nii.gz".format(
+                            base_path=base_path, contrast=contrast, model=model, group=group
                         )
-                        overlay_filename = "{base_path}\\{contrast}\\{model}{task_path}\\Subcortical\\{contrast}_{model}_Melbourne32_3D_{side}.nii.gz".format(
-                            base_path=base_path, contrast=contrast, model=model, task_path=task_path, side=side
+                        overlay_filename = "{base_path}\\{contrast}\\{model}\\{group}\\Subcortical\\{contrast}_{model}_Melbourne32_3D_{side}.nii.gz".format(
+                            base_path=base_path, contrast=contrast, model=model,group=group, side=side
                         )
                     else:
-                        filename = "{base_path}\\{contrast}\\{model}{task_path}\\Subcortical\\{contrast}_{model}-{submodel}_Melbourne32_3D.nii.gz".format(
-                            base_path=base_path, contrast=contrast, model=model, task_path=task_path, submodel=submodel
+                        filename = "{base_path}\\{contrast}\\{model}\\{group}\\Subcortical\\{contrast}_{model}-{submodel}_Melbourne32_3D.nii.gz".format(
+                            base_path=base_path, contrast=contrast, model=model, group=group, submodel=submodel
                         )
-                        overlay_filename = "{base_path}\\{contrast}\\{model}{task_path}\\Subcortical\\{contrast}_{model}-{submodel}_Melbourne32_3D_{side}.nii.gz".format(
-                            base_path=base_path, contrast=contrast, model=model, task_path=task_path, submodel=submodel, side=side
+                        overlay_filename = "{base_path}\\{contrast}\\{model}\\{group}\\Subcortical\\{contrast}_{model}-{submodel}_Melbourne32_3D_{side}.nii.gz".format(
+                            base_path=base_path, contrast=contrast, model=model, group=group, submodel=submodel, side=side
                         )
 
                     gl.loadimage(filename)
