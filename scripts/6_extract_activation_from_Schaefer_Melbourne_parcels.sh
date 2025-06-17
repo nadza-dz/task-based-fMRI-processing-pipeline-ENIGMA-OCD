@@ -13,7 +13,7 @@
 #SBATCH --time=01-0:00:00
 
 
-module load fsl/6.0.7.6
+module load fsl
 
 mergedir=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/merged
 demographic_file=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/covariates/RBA_input_demographics_only.csv
@@ -29,7 +29,6 @@ for atlas in 200; do
 
     for contrast in INHIBITION ERROR; do
         
-        excludedFD=${mergedir}/${contrast}/failed_FD1.0.txt 
         inputdir=${mergedir}/${contrast}/halfpipe
         mkdir -p ${mergedir}/${contrast}/Schaefer${atlas}_extracted_z-values
         ROIdir=${mergedir}/${contrast}/Schaefer${atlas}_extracted_z-values
@@ -172,12 +171,6 @@ for atlas in 200; do
         # Remove volume variable from RBA_input.txt
         awk -F, 'BEGIN {OFS=","} {NF--; print}' ${ROIdir}/${RBA_input} >${temp_file}
         mv ${temp_file} ${ROIdir}/${RBA_input}
-
-        # Remove the subjects who had too much motion and are excluded according to 1.0 FD thresshold
-        grep "^sub-" ${excludedFD} | while read -r line; do 
-            subject=$(echo "$line" | awk '{print $1}')
-            sed -i "/^${subject}\b/d" ${ROIdir}/${RBA_input}
-        done <${excludedFD}
 
     done
 
