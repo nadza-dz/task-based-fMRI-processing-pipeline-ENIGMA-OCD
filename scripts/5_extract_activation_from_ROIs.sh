@@ -10,7 +10,7 @@
 ###    (<30%) and subjects with too much motion.
 
 
-module load fsl/6.0.7.6
+module load fsl
 
 mergedir=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/merged
 demographic_file=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/covariates/RBA_input_demographics_only.csv
@@ -30,29 +30,6 @@ for contrast in INHIBITION ERROR; do
   dos2unix ${roivolume}
 
   atlasfile=${roisdir}/All_combined/3D_atlas_*ROIs.nii.gz
-
-  ##################################################
-  ### Read FD values from .json effect files to ####
-  ### identify subjects who had too much motion ####
-  ##################################################
-  
-  excludedFD=${mergedir}/${contrast}/failed_FD1.0.txt 
-  if [ ! -f "${excludedFD}" ]; then
-    echo "Subject FD" > "$excludedFD"
-
-    cd ${mergedir}/${contrast}/halfpipe
-    for sub in sub-*; do
-      jsonfile="${sub}/*effect_statmap.json"
-
-      if [ -f ${jsonfile} ]; then
-        fdmean=$(jq '.FDMean' ${jsonfile})
-            
-        if (( $(echo "$fdmean > 1.0" | bc -l) )); then
-          echo "$sub $fdmean" >> ${excludedFD}
-        fi
-      fi
-    done
-  fi
 
   #####################################
   ### Begin extracting activations  ###
@@ -200,10 +177,5 @@ for contrast in INHIBITION ERROR; do
   awk -F, 'BEGIN {OFS=","} {NF--; print}' ${ROIdir}/${RBA_input} >${temp_file}
   mv ${temp_file} ${ROIdir}/${RBA_input}
  
-  # Remove the subjects who had too much motion and are excluded according to 1.0 FD thresshold
-  grep "^sub-" ${excludedFD} | while read -r line; do 
-    subject=$(echo "$line" | awk '{print $1}')
-    sed -i "/^${subject}\b/d" ${ROIdir}/${RBA_input}
-  done <${excludedFD}
 
 done
