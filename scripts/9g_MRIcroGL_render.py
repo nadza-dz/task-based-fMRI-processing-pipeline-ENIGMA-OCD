@@ -10,7 +10,7 @@ import gl
 
 contrasts = ['INHIBITION', 'ERROR']
 models = ['YBOCS', 'AO', 'MED', 'BASE']
-groups = ['ADULT', 'PED', 'SST']
+groups = ['ADULT', 'PED', 'SST', 'ABCD']
 sides = ['left', 'right']
 
 base_path = 'C:\\Users\\P078744\\OneDrive - Amsterdam UMC\\Documents\\ENIGMA-OCD\\Temp\\Whole_brain\\Schaefer200'
