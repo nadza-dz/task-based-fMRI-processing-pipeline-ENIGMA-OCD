@@ -11,6 +11,9 @@
 ### It also creates separate output for the pediatric/adult samples as this was one of sensitivity 
 ### analyses in inhibitory domain
 
+### Note: Age of Onset only investigated in adult samples. ABCD dataset treated as separate from ENIGMA 
+### pediatric datasets and therefore analyzed as separate group. YBOCS not available for this group 
+
 library(dplyr)
 library(tidyr)
 
@@ -26,9 +29,11 @@ for (i in c("INHIBITION","ERROR")){
   BASE_PED = subset(RBA_input[RBA_input$AGEGROUP=="CHILD",], select = -c(AGEGROUP, TASK, YBOCS, MED, AO))
   BASE_ADULT = subset(RBA_input[(RBA_input$AGEGROUP=="ADULT" & RBA_input$AGE>=18),], select = -c(AGEGROUP, TASK, YBOCS, MED, AO))
   BASE_ADULT_SST = subset(RBA_input[(RBA_input$AGEGROUP=="ADULT" & RBA_input$AGE>=18 & RBA_input$TASK=="SST"),], select = -c(AGEGROUP, TASK, YBOCS, MED, AO))
+  BASE_ABCD = subset(RBA_input[RBA_input$AGEGROUP=="ABCD",], select = -c(AGEGROUP, TASK, YBOCS, MED, AO))
   write.table(BASE_PED, file = paste("RBA_input_",i,"_ROI_BASE_PED.txt",sep=""), sep = "\t", row.names = FALSE)
   write.table(BASE_ADULT, file = paste("RBA_input_",i,"_ROI_BASE_ADULT.txt",sep=""), sep = "\t", row.names = FALSE)
   write.table(BASE_ADULT_SST, file = paste("RBA_input_",i,"_ROI_BASE_SST.txt",sep=""), sep = "\t", row.names = FALSE)
+  write.table(BASE_ABCD, file = paste("RBA_input_",i,"_ROI_BASE_ABCD.txt",sep=""), sep = "\t", row.names = FALSE)
   
   ## YBOCS
   YBOCS = RBA_input[RBA_input$Dx=="OCD",]  
@@ -38,15 +43,17 @@ for (i in c("INHIBITION","ERROR")){
   write.table(YBOCS_PED, file = paste("RBA_input_",i,"_ROI_YBOCS_PED.txt",sep=""), sep = "\t", row.names = FALSE)
   write.table(YBOCS_ADULT, file = paste("RBA_input_",i,"_ROI_YBOCS_ADULT.txt",sep=""), sep = "\t", row.names = FALSE)
   write.table(YBOCS_ADULT_SST, file = paste("RBA_input_",i,"_ROI_YBOCS_SST.txt",sep=""), sep = "\t", row.names = FALSE)
-  
+
   ## MED
   MED = RBA_input[!RBA_input$MED=="",]
   MED_PED = subset(MED[MED$AGEGROUP=="CHILD",], select = -c(AGEGROUP, TASK, Dx, YBOCS, AO)) 
   MED_ADULT = subset(MED[(MED$AGEGROUP=="ADULT" & MED$AGE>=18),], select = -c(AGEGROUP, TASK, Dx, YBOCS, AO))
   MED_ADULT_SST = subset(MED[(MED$AGEGROUP=="ADULT" & MED$AGE>=18 & MED$TASK=="SST"),], select = -c(AGEGROUP, TASK, Dx, YBOCS, AO))
+  MED_ABCD = subset(MED[MED$AGEGROUP=="ABCD",], select = -c(AGEGROUP, TASK, Dx, YBOCS, AO))
   write.table(MED_PED, file = paste("RBA_input_",i,"_ROI_MED_PED.txt",sep=""), sep = "\t", row.names = FALSE)
   write.table(MED_ADULT, file = paste("RBA_input_",i,"_ROI_MED_ADULT.txt",sep=""), sep = "\t", row.names = FALSE)
   write.table(MED_ADULT_SST, file = paste("RBA_input_",i,"_ROI_MED_SST.txt",sep=""), sep = "\t", row.names = FALSE)
+  write.table(MED_ABCD, file = paste("RBA_input_",i,"_ROI_MED_ABCD.txt",sep=""), sep = "\t", row.names = FALSE)
   
   ## AO
   # Remove all child samples (investigate only adult samples)
@@ -108,9 +115,11 @@ for (j in c("200")){
     BASE_PED = subset(RBA_input[RBA_input$AGEGROUP=="CHILD",], select = -c(AGEGROUP, TASK, YBOCS, MED, AO))
     BASE_ADULT = subset(RBA_input[(RBA_input$AGEGROUP=="ADULT" & RBA_input$AGE>=18),], select = -c(AGEGROUP, TASK, YBOCS, MED, AO))
     BASE_ADULT_SST = subset(RBA_input[(RBA_input$AGEGROUP=="ADULT" & RBA_input$AGE>=18 & RBA_input$TASK=="SST"),], select = -c(AGEGROUP, TASK, YBOCS, MED, AO))
+    BASE_ABCD = subset(RBA_input[RBA_input$AGEGROUP=="ABCD",], select = -c(AGEGROUP, TASK, YBOCS, MED, AO))
     write.table(BASE_PED, file = paste("RBA_input_",i,"_Schaefer",j,"_BASE_PED.txt",sep=""), sep = "\t", row.names = FALSE)
     write.table(BASE_ADULT, file = paste("RBA_input_",i,"_Schaefer",j,"_BASE_ADULT.txt",sep=""), sep = "\t", row.names = FALSE)
     write.table(BASE_ADULT_SST, file = paste("RBA_input_",i,"_Schaefer",j,"_BASE_SST.txt",sep=""), sep = "\t", row.names = FALSE)
+    write.table(BASE_ABCD, file = paste("RBA_input_",i,"_Schaefer",j,"_BASE_ABCD.txt",sep=""), sep = "\t", row.names = FALSE)
     
     ## YBOCS
     YBOCS = RBA_input[RBA_input$Dx=="OCD",]  
@@ -126,9 +135,11 @@ for (j in c("200")){
     MED_PED = subset(MED[MED$AGEGROUP=="CHILD",], select = -c(AGEGROUP, TASK, Dx, YBOCS, AO)) 
     MED_ADULT = subset(MED[(MED$AGEGROUP=="ADULT" & MED$AGE>=18),], select = -c(AGEGROUP, TASK, Dx, YBOCS, AO))
     MED_ADULT_SST = subset(MED[(MED$AGEGROUP=="ADULT" & MED$AGE>=18 & MED$TASK=="SST"),], select = -c(AGEGROUP, TASK, Dx, YBOCS, AO))
+    MED_ABCD = subset(MED[MED$AGEGROUP=="ABCD",], select = -c(AGEGROUP, TASK, Dx, YBOCS, AO)) 
     write.table(MED_PED, file = paste("RBA_input_",i,"_Schaefer",j,"_MED_PED.txt",sep=""), sep = "\t", row.names = FALSE)
     write.table(MED_ADULT, file = paste("RBA_input_",i,"_Schaefer",j,"_MED_ADULT.txt",sep=""), sep = "\t", row.names = FALSE)
     write.table(MED_ADULT_SST, file = paste("RBA_input_",i,"_Schaefer",j,"_MED_SST.txt",sep=""), sep = "\t", row.names = FALSE)
+    write.table(MED_ABCD, file = paste("RBA_input_",i,"_Schaefer",j,"_MED_ABCD.txt",sep=""), sep = "\t", row.names = FALSE)
     
     ## AO
     # Remove all child samples (investigate only adult samples)
