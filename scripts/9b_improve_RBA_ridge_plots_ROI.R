@@ -28,7 +28,7 @@ for (contrast in c("INHIBITION","ERROR")){
 
   for (model in c("AO", "BASE", "MED", "YBOCS")){
       
-    for (group in c("ADULT", "PED", "SST")){ 
+    for (group in c("ADULT", "PED", "SST", "ABCD")){ 
       
       directories <- c(paste0("~/my-scratch/data_ENIGMA_OCD/ENIGMA_TASK/analysis/Inhibitory_domain/RBA/ROI/", contrast, "/", model, "/", group))
       
