@@ -12,7 +12,7 @@ for atlas in 200; do
 
             for model in BASE YBOCS AO MED; do
 
-                for group in ADULT PED SST; do 
+                for group in ADULT PED SST ABCD; do 
 
                     sbatch --output RBA_Schaefer${atlas}_${contrast}_${model}_${group}.log ${scriptdir}/8-3a_syntax_RBA_whole-brain.sh ${contrast} ${model} ${group} ${atlas}
 
