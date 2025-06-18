@@ -15,7 +15,7 @@ right_hem=/data/anw/anw-work/NP/projects/data_ENIGMA_OCD/MNI152NLin2009/MNI152NL
 for atlas in 200; do
     for contrast in INHIBITION ERROR; do
         for model in AO BASE MED YBOCS; do
-            for group in ADULT PED SST; do
+            for group in ADULT PED SST ABCD; do
                 for directory in ${base_dir}/Schaefer${atlas}/${contrast}/${model}/${group}; do
                 
                     cd ${directory}
