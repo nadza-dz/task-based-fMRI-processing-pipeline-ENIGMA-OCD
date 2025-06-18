@@ -52,7 +52,7 @@ for atlas in  ["Schaefer200"]:
     for contrast in ["INHIBITION","ERROR"]:
         for model in ["AO","BASE","MED","YBOCS"]:
             for group in ["ADULT","PED","SST","ABCD"]:
-                file_path = os.path.join(base_dir,atlas,contrast,model)
+                file_path = os.path.join(base_dir,atlas,contrast,model,group)
                 os.chdir(file_path)
                 
                 matching_files = glob.glob(os.path.join(file_path, '*_P_plus_values.csv'))
