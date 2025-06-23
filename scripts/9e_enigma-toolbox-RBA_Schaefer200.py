@@ -53,6 +53,11 @@ for atlas in  ["Schaefer200"]:
         for model in ["AO","BASE","MED","YBOCS"]:
             for group in ["ADULT","PED","SST","ABCD"]:
                 file_path = os.path.join(base_dir,atlas,contrast,model,group)
+                
+                if not os.path.exists(file_path):
+                   print(f"Directory does not exist: {file_path}")
+                   continue  # Skip to the next iteration if the directory doesn't exist
+
                 os.chdir(file_path)
                 
                 matching_files = glob.glob(os.path.join(file_path, '*_P_plus_values.csv'))
@@ -62,10 +67,10 @@ for atlas in  ["Schaefer200"]:
                         # Extract the desired portion of the filename
                         filename = os.path.basename(file)
                         label = os.path.splitext(filename)[0].split('_P_plus_values')[0]
-                                           
+                                        
                         # load P-plus values from file
                         df=pd.read_csv(os.path.join(file),sep=',',header=0,index_col=[0])
-                                   
+                                
                         # Merge df_reset with df_S200 on column 1
                         merged_df = df_S200.merge(df, left_on=[0], right_on=['ROI'])
                         
@@ -81,9 +86,8 @@ for atlas in  ["Schaefer200"]:
                         
                         # Project the results on the surface brain
                         plot_cortical(array_name=Plus_d_fsa5, surface_name="fsa5", size=(1600, 800),
-                                      cmap='RBA_color_scheme_cmap',color_bar=True, color_range=(0.0, 1.0),
-                                      screenshot=True,transparent_bg=False,filename=f'{label}_enigma_toolbox.jpg')
-    
+                                    cmap='RBA_color_scheme_cmap',color_bar=True, color_range=(0.0, 1.0),
+                                    screenshot=True,transparent_bg=False,filename=f'{label}_enigma_toolbox.jpg')
 
 # Create a colorbar with custom ticks and title
 colorbar_ticks = [0, 0.1, 0.9, 1]
