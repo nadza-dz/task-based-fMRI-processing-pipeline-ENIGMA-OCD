@@ -13,7 +13,7 @@ models = ['YBOCS', 'AO', 'MED', 'BASE']
 groups = ['ADULT', 'PED', 'SST', 'ABCD']
 sides = ['left', 'right']
 
-base_path = 'C:\\Users\\P078744\\OneDrive - Amsterdam UMC\\Documents\\ENIGMA-OCD\\Temp\\Whole_brain\\Schaefer200'
+base_path = 'Z:\\01_projects\\21_Task-fMRI_in preparation\\Inhibitory domain\\Results\\Whole_brain\\Schaefer200'
 
 for contrast in contrasts:
     for model in models:
