@@ -264,7 +264,7 @@ For the circuit-level analyses, we have expectations about where activation will
 
 > For visualization of ROIs on a glass brain, [BrainNetViewer](https://www.nitrc.org/projects/bnv) in Matlab is handy. Go to File > Load file > Surface file: BrainNetViewer\Data\SurfTemplateBrainMesh_ICBM152_smoothed.nv > Mapping file: 3D nifti file with all ROIs. Once loaded, go to Volume > Type selection > ROI drawing
 
-4. Use [`5_extract_activation_from_ROIs.sh`](script/5_extract_activation_from_ROIs.sh) script to extract activation from ROIs.
+4. Use [`5_extract_activation_from_ROIs.sh`](scripts/5_extract_activation_from_ROIs.sh) script to extract activation from ROIs.
 
 ### Whole-brain analyses
 
