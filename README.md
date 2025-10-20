@@ -316,7 +316,7 @@ While we control for site effects using sample as a random intercept, we also wa
 
 The Bayesian RBA tool outputs it's own visualization of regional effects for each ROI as a ridge plot. We improve slightly on these ridge plots by alphabetizing the ROIs (making it easier to compare different models or contrasts side-by-side), and and modifying the color bar to make the regions in which there is evidence for differences slightly more salient, and suppress coloring regions in which there is weak or no evidence of differences.
 
-1.	Use [`9b_improve_RBA_ridge_plots_ROI.R`](scripts/9b_improve_RBA_ridge_plots_ROI.R) script which calls [`alphabet_ridge.R`](scripts/alphabet_ridge.R) function to remake all figures for ROI analyses. The [`9b_improve_RBA_ridge_plots_ROI.R`](scripts/9b_improve_RBA_ridge_plots_ROI.R) script optionally takes a range of P+ values from the leave-one-sample-out sensitivity analyses performed above, which is created using the [`9a_ROI_jackknife_raincloud_plots.R`](scripts/9a_ROI_jackknife_raincloud_plots.R) script below. 
+1.	Use [`9b_improve_RBA_ridge_plots_ROI.R`](scripts/9b_improve_RBA_ridge_plots_ROI.R) script which calls [`alphabet_ridge.R`](scripts/ridge_alphabet.R) function to remake all figures for ROI analyses. The [`9b_improve_RBA_ridge_plots_ROI.R`](scripts/9b_improve_RBA_ridge_plots_ROI.R) script optionally takes a range of P+ values from the leave-one-sample-out sensitivity analyses performed above, which is created using the [`9a_ROI_jackknife_raincloud_plots.R`](scripts/9a_ROI_jackknife_raincloud_plots.R) script below. 
 
 <p align="center">
   <img src="images/how_to_read_RBA_ridge_plots.jpg" alt="Cognitive domains" width="600"/><br/>
@@ -412,7 +412,7 @@ All these files will be written to the `/merged` directory's contrast-of-interes
 
 Dzinalija, N., Vriend, C., ENIGMA-OCD Consortium, … , Veer, I., van den Heuvel, O. A. (2024). Negative valence in Obsessive-Compulsive Disorder: A worldwide mega-analysis of task-based functional neuroimaging data of the ENIGMA-OCD consortium. Biological psychiatry, S0006-3223(24)01819-5. https://doi.org/10.1016/j.biopsych.2024.12.011
 
-Dzinalija, N., Veer, I., ENIGMA-OCD Consortium, … , van den Heuvel, O. A., Vriend, C. (2025). Executive control in Obsessive-Compulsive Disorder: A worldwide mega-analysis of task-based functional neuroimaging data of the ENIGMA-OCD consortium. https://osf.io/ebtpk
+Dzinalija, N., Veer, I., ENIGMA-OCD Consortium, … , van den Heuvel, O. A., Vriend, C. (2025). Executive control in Obsessive-Compulsive Disorder: A worldwide mega-analysis of task-based functional neuroimaging data of the ENIGMA-OCD consortium. https://www.biorxiv.org/content/10.1101/2025.08.20.671231v1
 
 Dzinalija, N.,  van den Heuvel, O. A., ENIGMA-OCD Consortium, … , Vriend, C., Veer, I. (2025). Inhibitory control in OCD: A mega-analysis of task-based fMRI data of the ENIGMA-OCD consortium. https://osf.io/mhq8t
 
