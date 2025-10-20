@@ -53,6 +53,7 @@ for contrast in contrasts:
                             base_path=base_path, contrast=contrast, model=model, group=group, submodel=submodel, side=side
                         )
 
+                    gl.windowposition(0, 0,1414,955)
                     gl.loadimage(filename)
                     gl.overlayload(overlay_filename)  
                     gl.minmax(0, 1, 5)
